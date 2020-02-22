@@ -63,6 +63,7 @@ clear
 #
 read -p "sitename: " -e -i exsample.domain sitename
 mkdir /var/www/$sitename
+echo " <html><body><center>nginx test html</center></body></html> " >> /var/www/$sitename/intex.html
 echo "server {
 	listen 80 default_server;
 	listen [::]:80 default_server;
