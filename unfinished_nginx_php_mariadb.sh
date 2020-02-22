@@ -114,6 +114,11 @@ EOF
 ###create folders
 mkdir -p /var/www/$servername/
 mkdir -p /var/www/letsencrypt /etc/letsencrypt/rsa-certs /etc/letsencrypt/ecc-certs
+###create temp html and php file
+echo "<html><body><center>test HTML file</center></body></html>" >> /var/www/$servername/index.html
+echo "<?php
+phpinfo();
+?>" >> /var/www/$servername/info.php
 ###apply permissions
 chown -R www-data:www-data /var/www
 ###install PHP - Backup default files
