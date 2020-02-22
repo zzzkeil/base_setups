@@ -68,8 +68,8 @@ echo "server {
 	listen 80 default_server;
 	listen [::]:80 default_server;
 
-	server_name first.com www.first.com;
-	root /var/www/first;
+	server_name $sitename www.$sitename;
+	root /var/www/$sitename;
 
 	index index.html;
 	location / {
