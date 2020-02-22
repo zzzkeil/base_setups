@@ -88,9 +88,9 @@ apt install software-properties-common
 add-apt-repository universe
 add-apt-repository ppa:certbot/certbot
 apt update
-apt install certbot python-certbot-nginx
+apt install certbot python-certbot-nginx -y
 #
-echo"
+echo "
 rsa-key-size = 4096
 " | tee --append /etc/letsencrypt/cli.ini > /dev/null
 # make your own decision for certbot --nginx
