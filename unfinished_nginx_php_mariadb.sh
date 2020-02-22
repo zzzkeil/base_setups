@@ -28,7 +28,12 @@ if [[ -e /etc/debian_version ]]; then
       echo "This is not a Debian Distribution."
       exit 1
 fi
-
+#
+#ufw for nginx
+#
+ufw allow 80
+ufw allow 443
+ufw reload
 #
 # APT
 #
