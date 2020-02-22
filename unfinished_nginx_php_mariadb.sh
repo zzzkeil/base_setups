@@ -96,10 +96,10 @@ rsa-key-size = 4096
 " | tee --append /etc/letsencrypt/cli.ini > /dev/null
 # make your own decision for certbot --nginx
 certbot --nginx
-sed -i 's/listen [::]:443 ssl ipv6only=on;/listen [::]:443 ssl http2;/g' /etc/nginx/sites-available/$sitename.conf
+sed -i 's/ipv6only=on;/http2;/g' /etc/nginx/sites-available/$sitename.conf
 sed -i 's/listen 443 ssl;/listen 443 ssl http2;/g' /etc/nginx/sites-available/$sitename.conf
-sed '/listen 443 ssl http2;/a gzip off;' /etc/nginx/sites-available/$sitename.conf
-sed '/ssl_certificate_key /etc/letsencrypt/live/'$sitename'/privkey.pem;/a ssl_trusted_certificate /etc/letsencrypt/live/'$sitename'/chain.pem;' /etc/nginx/sites-available/$sitename.conf
+sed -i '/listen 443 ssl http2;/a gzip off;' /etc/nginx/sites-available/$sitename.conf
+sed -i '/privkey.pem;/a ssl_trusted_certificate /etc/letsencrypt/live/'$sitename'/chain.pem;' /etc/nginx/sites-available/$sitename.conf
 
 cp /etc/letsencrypt/options-ssl-nginx.conf /etc/letsencrypt/options-ssl-nginx.conf.bak
 rm /etc/letsencrypt/options-ssl-nginx.conf
