@@ -61,7 +61,7 @@ clear
 #
 #nginx configs
 #
-read -p "sitename" -e -i exsample.domain sitename
+read -p "sitename: " -e -i exsample.domain sitename
 mkdir /var/www/$sitename
 echo "server {
 	listen 80 default_server;
@@ -75,7 +75,7 @@ echo "server {
 		try_files $uri $uri/ =404;
 	}
 }
-" >> /etc/nginx/sites-available/$sitename
+" >> /etc/nginx/sites-available/$sitename.conf
 rm /etc/nginx/sites-enabled/default
 ln -s /etc/nginx/sites-available/$sitename.conf /etc/nginx/sites-enabled/$sitename.conf
 systemctl restart nginx.service
