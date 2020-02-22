@@ -410,7 +410,7 @@ sed -i s/\#\include/\include/g /etc/nginx/nginx.conf
 
 ###restart NGINX
 /usr/sbin/service nginx restart
-openssl dhparam -out /etc/ssl/certs/dhparam.pem 4096
+#openssl dhparam -out /etc/ssl/certs/dhparam.pem 4096
 
 adduser acmeuser
 usermod -a -G www-data acmeuser
