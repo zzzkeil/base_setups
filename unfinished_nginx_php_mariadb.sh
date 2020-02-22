@@ -122,11 +122,6 @@ phpinfo();
 chown -R www-data:www-data /var/www
 ###install PHP - Backup default files
 apt install php7.4-fpm php7.4-gd php7.4-mysql php7.4-curl php7.4-xml php7.4-zip php7.4-intl php7.4-mbstring php7.4-json php7.4-bz2 php7.4-ldap php-apcu imagemagick php-imagick -y
-cp /etc/php/7.4/fpm/pool.d/www.conf /etc/php/7.4/fpm/pool.d/www.conf.bak
-cp /etc/php/7.4/cli/php.ini /etc/php/7.4/cli/php.ini.bak
-cp /etc/php/7.4/fpm/php.ini /etc/php/7.4/fpm/php.ini.bak
-cp /etc/php/7.4/fpm/php-fpm.conf /etc/php/7.4/fpm/php-fpm.conf.bak
-cp /etc/ImageMagick-6/policy.xml /etc/ImageMagick-6/policy.xml.bak
 
 ###PHP Mods: cli/php.ini
 sed -i "s/output_buffering =.*/output_buffering = 'Off'/" /etc/php/7.4/cli/php.ini
@@ -152,12 +147,7 @@ sed -i "s/;opcache.max_accelerated_files=.*/opcache.max_accelerated_files=10000/
 sed -i "s/;opcache.revalidate_freq=.*/opcache.revalidate_freq=1/" /etc/php/7.4/fpm/php.ini
 sed -i "s/;opcache.save_comments=.*/opcache.save_comments=1/" /etc/php/7.4/fpm/php.ini
 sed -i "$aapc.enable_cli=1" /etc/php/7.4/mods-available/apcu.ini
-### Solution for ImageMagick errors
-sed -i "s/rights=\"none\" pattern=\"PS\"/rights=\"read|write\" pattern=\"PS\"/" /etc/ImageMagick-6/policy.xml
-sed -i "s/rights=\"none\" pattern=\"EPI\"/rights=\"read|write\" pattern=\"EPI\"/" /etc/ImageMagick-6/policy.xml
-sed -i "s/rights=\"none\" pattern=\"PDF\"/rights=\"read|write\" pattern=\"PDF\"/" /etc/ImageMagick-6/policy.xml
-sed -i "s/rights=\"none\" pattern=\"XPS\"/rights=\"read|write\" pattern=\"XPS\"/" /etc/ImageMagick-6/policy.xml
-ln -s /usr/local/bin/gs /usr/bin/gs
+
 ###restart PHP and NGINX
 /usr/sbin/service php7.4-fpm restart
 /usr/sbin/service nginx restart
@@ -407,39 +397,15 @@ sed -i s/\#\include/\include/g /etc/nginx/nginx.conf
 /usr/sbin/service nginx restart
 #openssl dhparam -out /etc/ssl/certs/dhparam.pem 4096
 
-adduser acmeuser
-usermod -a -G www-data acmeuser
-su - acmeuser
 curl https://get.acme.sh | sh
-exit
 mkdir -p /var/www/letsencrypt/.well-known/acme-challenge /etc/letsencrypt/rsa-certs /etc/letsencrypt/ecc-certs
 chmod -R 775 /var/www/letsencrypt /etc/letsencrypt && chown -R www-data:www-data /var/www/ /etc/letsencrypt
-su - acmeuser
 acme.sh --issue -d $servername --keylength 4096 -w /var/www/letsencrypt --key-file /etc/letsencrypt/rsa-certs/privkey.pem --ca-file /etc/letsencrypt/rsa-certs/chain.pem --cert-file /etc/letsencrypt/rsa-certs/cert.pem --fullchain-file /etc/letsencrypt/rsa-certs/fullchain.pem
 acme.sh --issue -d $servername --keylength ec-384 -w /var/www/letsencrypt --key-file /etc/letsencrypt/ecc-certs/privkey.pem --ca-file /etc/letsencrypt/ecc-certs/chain.pem --cert-file /etc/letsencrypt/ecc-certs/cert.pem --fullchain-file /etc/letsencrypt/ecc-certs/fullchain.pem
-exit
-echo "#!/bin/bash
-find /var/www/ -type f -print0 | xargs -0 chmod 0640
-find /var/www/ -type d -print0 | xargs -0 chmod 0750
-chmod -R 775 /var/www/letsencrypt /etc/letsencrypt 
-chown -R www-data:www-data /var/www /etc/letsencrypt
-exit 0" >> /root/permissions.sh
-chmod +x /root/permissions.sh
-./root/permissions.sh
 sed -i '/ssl-cert-snakeoil/d' /etc/nginx/ssl.conf
 sed -i s/\#\ssl/\ssl/g /etc/nginx/ssl.conf
 service nginx restart
-echo "#!/bin/bash
-sudo -u acmeuser "/home/acmeuser/.acme.sh"/acme.sh --cron --home "/home/acmeuser/.acme.sh"
-/usr/sbin/service nginx stop
-/usr/sbin/service mysql restart
-/usr/sbin/service redis-server restart
-/usr/sbin/service php7.4-fpm restart
-/usr/sbin/service nginx restart
-exit 0" >> /root/renewal.sh
-chmod +x /root/renewal.sh
-crontab -u acmeuser -l | sed '/^[^#].*/home/acmeuser/.acme.sh*/s/^/#/' | crontab -
-(crontab -l ; echo "@weekly /root/renewal.sh 2>&1") | sort - | uniq - | crontab -
+
 
 ### CleanUp
 cat /dev/null > ~/.bash_history && history -c && history -w
