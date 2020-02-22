@@ -85,8 +85,8 @@ systemctl restart nginx.service
 #Certbot
 #
 apt install software-properties-common
-add-apt-repository universe
-add-apt-repository ppa:certbot/certbot
+add-apt-repository universe -y
+add-apt-repository ppa:certbot/certbot -y
 apt update
 apt install certbot python-certbot-nginx -y
 #
