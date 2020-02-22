@@ -127,12 +127,7 @@ cp /etc/php/7.4/cli/php.ini /etc/php/7.4/cli/php.ini.bak
 cp /etc/php/7.4/fpm/php.ini /etc/php/7.4/fpm/php.ini.bak
 cp /etc/php/7.4/fpm/php-fpm.conf /etc/php/7.4/fpm/php-fpm.conf.bak
 cp /etc/ImageMagick-6/policy.xml /etc/ImageMagick-6/policy.xml.bak
-###PHP Mods: www.conf
-sed -i "s/;env\[HOSTNAME\] = /env[HOSTNAME] = /" /etc/php/7.4/fpm/pool.d/www.conf
-sed -i "s/;env\[TMP\] = /env[TMP] = /" /etc/php/7.4/fpm/pool.d/www.conf
-sed -i "s/;env\[TMPDIR\] = /env[TMPDIR] = /" /etc/php/7.4/fpm/pool.d/www.conf
-sed -i "s/;env\[TEMP\] = /env[TEMP] = /" /etc/php/7.4/fpm/pool.d/www.conf
-sed -i "s/;env\[PATH\] = /env[PATH] = /" /etc/php/7.4/fpm/pool.d/www.conf
+
 ###PHP Mods: cli/php.ini
 sed -i "s/output_buffering =.*/output_buffering = 'Off'/" /etc/php/7.4/cli/php.ini
 sed -i "s/max_execution_time =.*/max_execution_time = 3600/" /etc/php/7.4/cli/php.ini
