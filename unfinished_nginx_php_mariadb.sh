@@ -78,7 +78,7 @@ apt-key adv --recv-keys --keyserver hkps://keyserver.ubuntu.com:443 4F4EA0AAE526
 apt-key adv --recv-keys --keyserver hkps://keyserver.ubuntu.com:443 0xF1656F24C74CD1D8
 update_and_clean
 apt install software-properties-common zip unzip screen git wget ffmpeg libfile-fcntllock-perl locate ghostscript tree htop -y
-apt remove nginx nginx-common nginx-full -y --allow-change-held-packages
+#apt remove nginx nginx-common nginx-full -y --allow-change-held-packages
 ###instal NGINX using TLSv1.3, OpenSSL 1.1.1
 update_and_clean
 apt install nginx -y
