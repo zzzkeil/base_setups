@@ -165,6 +165,9 @@ echo ""
 echo "Total banned IPs from fail2ban : $totalban1 "
 ' >> /etc/update-motd.d/99-base01
 chmod +x /etc/update-motd.d/99-base01
+echo "base_server script installed from :
+https://github.com/zzzkeil/base_setups/blob/master/base_setup.sh
+" > /root/base_setup.README
 clear
 #
 # END
