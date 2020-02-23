@@ -48,6 +48,23 @@ function restart_all_services() {
 /usr/sbin/service redis-server restart
 /usr/sbin/service php7.4-fpm restart
 }
+###
+function copy4SSL() {
+cp /etc/nginx/conf.d/$servername.conf /etc/nginx/conf.d/$servername.conf.orig
+cp /etc/nginx/ssl.conf /etc/nginx/ssl.conf.orig
+}
+###
+function errorSSL() {
+clear
+echo "!!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!!"
+echo "*** ERROR while requesting your certificate(s) ***"
+echo ""
+echo "Verify that both ports (80 + 443) are forwarded to this server!"
+echo "And verify, your dyndns points to your IP either!"
+echo "Then retry..."
+echo "!!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!!"
+echo ""
+}
 ### START ###
 apt install gnupg gnupg2 lsb-release wget curl -y
 ###prepare the server environment
@@ -397,17 +414,21 @@ sed -i s/\#\include/\include/g /etc/nginx/nginx.conf
 /usr/sbin/service nginx restart
 #openssl dhparam -out /etc/ssl/certs/dhparam.pem 4096
 
-curl https://get.acme.sh | sh
-mkdir -p /var/www/letsencrypt/.well-known/acme-challenge /etc/letsencrypt/rsa-certs /etc/letsencrypt/ecc-certs
-chmod -R 775 /var/www/letsencrypt /etc/letsencrypt && chown -R www-data:www-data /var/www/ /etc/letsencrypt
-cd .acme.sh/
-./acme.sh --issue -d $servername --keylength 4096 -w /var/www/letsencrypt --key-file /etc/letsencrypt/rsa-certs/privkey.pem --ca-file /etc/letsencrypt/rsa-certs/chain.pem --cert-file /etc/letsencrypt/rsa-certs/cert.pem --fullchain-file /etc/letsencrypt/rsa-certs/fullchain.pem
-./acme.sh --issue -d $servername --keylength ec-384 -w /var/www/letsencrypt --key-file /etc/letsencrypt/ecc-certs/privkey.pem --ca-file /etc/letsencrypt/ecc-certs/chain.pem --cert-file /etc/letsencrypt/ecc-certs/cert.pem --fullchain-file /etc/letsencrypt/ecc-certs/fullchain.pem
-cd ..
-sed -i '/ssl-cert-snakeoil/d' /etc/nginx/ssl.conf
-sed -i s/\#\ssl/\ssl/g /etc/nginx/ssl.conf
-service nginx restart
+add-apt-repository ppa:certbot/certbot -y
+apt update
+apt install letsencrypt -y
+letsencrypt certonly -a webroot --webroot-path=/var/www/letsencrypt --rsa-key-size 4096 -d $servername
 
+if [ ! -d "/etc/letsencrypt/live" ]; then
+errorSSL
+else
+copy4SSL
+sed -i '/ssl-cert-snakeoil/d' /etc/nginx/ssl.conf
+sed -i "s/server_name.*;/server_name $servername;/" /etc/nginx/conf.d/$servername.conf
+sed -i s/\#\ssl/\ssl/g /etc/nginx/ssl.conf
+sed -i s/ssl_dhparam/\#ssl_dhparam/g /etc/nginx/ssl.conf
+fi
+systemctl restart nginx.service
 
 ### CleanUp
 cat /dev/null > ~/.bash_history && history -c && history -w
