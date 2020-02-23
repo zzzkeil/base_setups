@@ -417,7 +417,7 @@ sed -i s/\#\include/\include/g /etc/nginx/nginx.conf
 add-apt-repository ppa:certbot/certbot -y
 apt update
 apt install letsencrypt -y
-letsencrypt certonly -a webroot --webroot-path=/var/www/letsencrypt --rsa-key-size 4096 -d $servername
+letsencrypt certonly --dry-run -a webroot --webroot-path=/var/www/letsencrypt --rsa-key-size 4096 -d $servername
 
 if [ ! -d "/etc/letsencrypt/live" ]; then
 errorSSL
