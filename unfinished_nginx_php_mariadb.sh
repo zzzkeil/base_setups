@@ -286,6 +286,15 @@ server_name $servername;
 listen 443 ssl http2 default_server;
 listen [::]:443 ssl http2 default_server;
 root /var/www/$servername;
+index index.php index.html index.htm;
+
+location ~ \.php$ {
+    try_files $uri =404;
+    include /etc/nginx/fastcgi_params;
+    fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME var/www/mvf.zeroaim.de/$fastcgi_script_name;
+}
 }
 
 EOF
