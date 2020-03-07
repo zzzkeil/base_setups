@@ -285,10 +285,7 @@ server {
 server_name $servername;
 listen 443 ssl http2 default_server;
 listen [::]:443 ssl http2 default_server;
-root /var/www/$servername/;
-location / {
-		try_files $uri $uri/ =404;
-	}
+root /var/www/$servername;
 }
 
 EOF
