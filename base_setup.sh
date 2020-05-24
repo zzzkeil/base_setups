@@ -159,10 +159,10 @@ chmod -x /etc/update-motd.d/80-livepatch
 echo '#!/bin/sh
 runtime1=$(uptime -s)
 runtime2=$(uptime -p)
-totalban1=$(zgrep 'Ban' /var/log/fail2ban.log* | wc -l)
+#totalban1=$(zgrep 'Ban' /var/log/fail2ban.log* | wc -l)
 echo "System uptime : $runtime1  / $runtime2 "
 echo ""
-echo "Total banned IPs from fail2ban : $totalban1 "
+#echo "Total banned IPs from fail2ban : $totalban1 "
 ' >> /etc/update-motd.d/99-base01
 chmod +x /etc/update-motd.d/99-base01
 echo "base_server script installed from :
