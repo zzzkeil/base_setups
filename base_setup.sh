@@ -1,11 +1,11 @@
 #!/bin/bash
 clear
-echo " #############################################"
-echo " # Setup server config Netcup Ubuntu 18.04   #"
-echo " # Setup server config Netcup Debian 10      #"
-echo " # passwd,ssh,fail2ban,ufw,network,updates   #"
-echo " # !!!!!!!!!! Automatic reboot !!!!!!!!!!!   #"
-echo " #############################################"
+echo " ###############################################################"
+echo " # Setup server config Netcup/Hetzner Ubuntu 18.04 and above   #"
+echo " # Setup server config Netcup/Hetzner Debian 10                #"
+echo " #            passwd,ssh,fail2ban,ufw,network,updates          #"
+echo " #            !!!!!!!!!! Automatic reboot !!!!!!!!!!!          #"
+echo " ###############################################################"
 echo ""
 echo ""
 echo "To EXIT this script press  [ENTER]"
