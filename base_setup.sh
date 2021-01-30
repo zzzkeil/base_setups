@@ -92,7 +92,7 @@ clear
 #
 echo "Set ufw config"
 ufw default deny incoming
-ufw allow $sshport/tcp
+ufw limit $sshport/tcp
 clear
 #
 # fail2ban
