@@ -71,7 +71,7 @@ X11Forwarding no
 PermitEmptyPasswords no
 PrintMotd no
 AcceptEnv LANG LC_*
-Subsystem	sftp	/usr/lib/openssh/sftp-server" >> /etc/ssh/sshd_config
+Subsystem sftp  internal-sftp" >> /etc/ssh/sshd_config
 clear
 #
 # Network
