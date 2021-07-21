@@ -39,6 +39,10 @@ echo "system update and install"
 dnf check-update && dnf -y update 
 
 dnf -y install nano ufw fail2ban dnf-automatic
+systemctl disable --now firewalld.service
+rpm -e --nodeps firewalld
+rpm -e --nodeps fail2ban-firewalld
+
 
 mkdir /root/script_backupfiles/
 clear
