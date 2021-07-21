@@ -1,5 +1,12 @@
 #!/bin/bash
 clear
+
+
+
+
+
+
+
 echo " ###############################################################"
 echo " #     Try to convert this script from debian based to ferora  #"
 echo " #            passwd,ssh,fail2ban,ufw,network,updates          #"
@@ -106,6 +113,7 @@ clear
 # UFW
 #
 echo "Set ufw config"
+ufw reset
 ufw default deny incoming
 ufw limit $sshport/tcp
 clear
