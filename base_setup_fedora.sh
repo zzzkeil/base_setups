@@ -38,8 +38,8 @@ echo "system update and install"
 #apt install ufw fail2ban  unattended-upgrades apt-listchanges -y 
 dnf -y clean all && dnf check-update && dnf -y update 
 
-systemctl stop firewalld
-systemctl disable firewalld 
+systemctl disable --now firewalld.service
+
 dnf -y remove firewalld
 
 dnf -y install nano ufw fail2ban dnf-automatic
@@ -171,8 +171,8 @@ clear
 #
 # END
 #
-systemctl enable fail2ban.service
-systemctl enable ufw.service
+systemctl enable --now fail2ban.service
+systemctl enable --now ufw.service
 ufw reload
 echo ""
 read -p "Press enter to reboot"
