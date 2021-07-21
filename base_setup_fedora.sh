@@ -36,14 +36,9 @@ fi
 echo "system update and install"
 #apt update && apt upgrade -y && apt autoremove -y
 #apt install ufw fail2ban  unattended-upgrades apt-listchanges -y 
-dnf -y clean all && dnf check-update && dnf -y update 
-
-systemctl disable --now firewalld.service
-
-dnf -y remove firewalld
+dnf check-update && dnf -y update 
 
 dnf -y install nano ufw fail2ban dnf-automatic
-
 
 mkdir /root/script_backupfiles/
 clear
