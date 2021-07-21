@@ -37,6 +37,11 @@ echo "system update and install"
 #apt update && apt upgrade -y && apt autoremove -y
 #apt install ufw fail2ban  unattended-upgrades apt-listchanges -y 
 dnf -y clean all && dnf check-update && dnf -y update 
+
+systemctl stop firewalld
+systemctl disable firewalld 
+dnf -y remove firewalld
+
 dnf -y install nano ufw fail2ban dnf-automatic
 
 
@@ -159,8 +164,6 @@ clear
 #' >> /etc/update-motd.d/99-base01
 #chmod +x /etc/update-motd.d/99-base01
 
-
-
 echo "base_server script installed from :
 https://github.com/zzzkeil/base_setups/blob/master/base_setup_fedora.sh
 " > /root/base_setup.README
@@ -169,7 +172,8 @@ clear
 # END
 #
 systemctl enable fail2ban.service
-read -p "Press enter to reboot"
-ufw --force enable
+systemctl enable ufw.service
 ufw reload
+echo ""
+read -p "Press enter to reboot"
 reboot
