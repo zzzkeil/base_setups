@@ -1,18 +1,34 @@
 #!/bin/bash
+
+# visual text settings
+RED="\e[31m"
+GREEN="\e[32m"
+GRAY="\e[37m"
+YELLOW="\e[93m"
+
+REDB="\e[41m"
+GREENB="\e[42m"
+GRAYB="\e[47m"
+ENDCOLOR="\e[0m"
+
 clear
-echo " ###############################################################"
-echo " # Setup server config Netcup/Hetzner Ubuntu 18.04 and above   #"
-echo " # Setup server config Netcup/Hetzner Debian 10                #"
-echo " #            passwd,ssh,fail2ban,ufw,network,updates          #"
-echo " #            !!!!!!!!!! Automatic reboot !!!!!!!!!!!          #"
-echo " ###############################################################"
+echo -e " ${GRAYB}##############################################################################${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}Base server config for Debian 11 and Ubuntu 20.04     ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}This script installs an configure :                   ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}passwd,ssh,fail2ban,ufw,network,unattended-upgrades   ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}Infos @ https://github.com/zzzkeil/base_setups        ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
+echo -e " ${GRAYB}##############################################################################${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR}                 Version 2021.12.12 - changelog on github                   ${GRAYB}#${ENDCOLOR}"
+echo -e " ${GRAYB}##############################################################################${ENDCOLOR}"
 echo ""
 echo ""
-echo "To EXIT this script press  [ENTER]"
-echo 
-read -p "To RUN this script press  [Y]" -n 1 -r
-echo
-echo
+echo ""
+echo  -e "                    ${RED}To EXIT this script press any key${ENDCOLOR}"
+echo ""
+echo  -e "                            ${GREEN}Press [Y] to begin${ENDCOLOR}"
+read -p "" -n 1 -r
+echo ""
+echo ""
 if [[ ! $REPLY =~ ^[Yy]$ ]]
 then
     exit 1
@@ -85,6 +101,9 @@ if [ -f "/etc/netplan/50-cloud-init.yaml" ]; then
 fi
 if [ -f "/etc/network/interfaces.d/50-cloud-init.cfg" ]; then
    nano /etc/network/interfaces.d/50-cloud-init.cfg
+fi
+if [ -f "/etc/network/interfaces" ]; then
+   nano /etc/network/interfaces
 fi
 
 clear
