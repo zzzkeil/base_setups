@@ -47,7 +47,7 @@ fi
 # check if Debian or ubuntu
 #
 
-echo "${GREEN}OS check ${ENDCOLOR}"
+echo -e "${GREEN}OS check ${ENDCOLOR}"
 . /etc/os-release
 if [[ "$ID" = 'debian' ]] || [[ "$ID" = 'ubuntu' ]]; then
    echo -e "OS ID check = ${GREEN}ok${ENDCOLOR}"
@@ -60,7 +60,7 @@ fi
 # APT
 #
 
-echo "${GREEN}apt update upgrade and install ${ENDCOLOR}"
+echo -e "${GREEN}apt update upgrade and install ${ENDCOLOR}"
 apt update && apt upgrade -y && apt autoremove -y
 apt install ufw fail2ban  unattended-upgrades apt-listchanges -y 
 mkdir /root/script_backupfiles/
@@ -70,7 +70,7 @@ clear
 # Password
 #
 
-echo "${GREEN}Set root password  ${ENDCOLOR}"
+echo -e "${GREEN}Set root password  ${ENDCOLOR}"
 echo "This script creates a random password - use it, or not"
 randompasswd=$(</dev/urandom tr -dc 'A-Za-z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_`{|}~' | head -c 44  ; echo)
 echo "Random Password  - mark it once, right mouse klick, enter, and again !"
@@ -83,7 +83,7 @@ clear
 # SSH
 #
 
-echo "${GREEN}Set ssh config  ${ENDCOLOR}"
+echo -e "${GREEN}Set ssh config  ${ENDCOLOR}"
 read -p "Choose your SSH Port: (default 22) " -e -i 2222 sshport
 ssh-keygen -f /etc/ssh/key1rsa -t rsa -b 4096 -N ""
 ssh-keygen -f /etc/ssh/key2ecdsa -t ecdsa -b 521 -N ""
@@ -110,7 +110,7 @@ clear
 # Network
 #
 
-echo "${GREEN}Set network config  ${ENDCOLOR}"
+echo -e "${GREEN}Set network config  ${ENDCOLOR}"
 read -p "Your hostname :" -e -i remotehost hostnamex
 hostnamectl set-hostname $hostnamex
 if [ -f "/etc/netplan/50-cloud-init.yaml" ]; then
@@ -124,7 +124,7 @@ fi
 # UFW
 #
 
-echo "${GREEN}Set ufw config  ${ENDCOLOR}"
+echo -e "${GREEN}Set ufw config  ${ENDCOLOR}"
 ufw default deny incoming
 ufw limit $sshport/tcp
 clear
@@ -133,7 +133,7 @@ clear
 # fail2ban
 #
 
-echo "${GREEN}Set fail2ban for ssh ${ENDCOLOR}"
+echo -e "${GREEN}Set fail2ban for ssh ${ENDCOLOR}"
 echo "
 [sshd]
 enabled = true
@@ -153,7 +153,7 @@ clear
 # Updates
 #
 
-echo "${GREEN}unattended-upgrades  ${ENDCOLOR}"
+echo -e "${GREEN}unattended-upgrades  ${ENDCOLOR}"
 mv /etc/apt/apt.conf.d/50unattended-upgrades /root/script_backupfiles/50unattended-upgrades.orig
 echo 'Unattended-Upgrade::Allowed-Origins {
         "${distro_id}:${distro_codename}";
@@ -191,7 +191,7 @@ clear
 #misc
 #
 
-echo "${GREEN}Clear/Change some stuff ${ENDCOLOR}"
+echo -e "${GREEN}Clear/Change some stuff ${ENDCOLOR}"
 
 if [[ -e /etc/update-motd.d/10-help-text ]]; then
     chmod -x /etc/update-motd.d/10-help-text
@@ -222,7 +222,8 @@ clear
 #
 
 systemctl enable fail2ban.service
-read -p "${GREEN}Press enter to reboot  ${ENDCOLOR}"
+echo -e "${GREEN}Press enter to reboot  ${ENDCOLOR}"
+read -p ""
 ufw --force enable
 ufw reload
 reboot
