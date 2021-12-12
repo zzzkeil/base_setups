@@ -34,22 +34,33 @@ then
     exit 1
 fi
 
+#
+#root check
+#
+
 if [[ "$EUID" -ne 0 ]]; then
-	echo "Sorry, you need to run this as root"
+	echo -e "${RED}Sorry, you need to run this as root${ENDCOLOR}"
 	exit 1
 fi
 
-if [[ -e /etc/debian_version ]]; then
-      echo "Debian Distribution"
-      else
-      echo "This is not a Debian Distribution."
-      exit 1
+#
+# check if Debian or ubuntu
+#
+
+echo "${GREEN}OS check ${ENDCOLOR}"
+. /etc/os-release
+if [[ "$ID" = 'debian' ]] || [[ "$ID" = 'ubuntu' ]]; then
+   echo -e "OS ID check = ${GREEN}ok${ENDCOLOR}"
+   else 
+   echo -e "${RED}This script is only for Debian and Ubuntu ${ENDCOLOR}"
+   exit 1
 fi
 
 #
 # APT
 #
-echo "apt update and install"
+
+echo "${GREEN}apt update upgrade and install ${ENDCOLOR}"
 apt update && apt upgrade -y && apt autoremove -y
 apt install ufw fail2ban  unattended-upgrades apt-listchanges -y 
 mkdir /root/script_backupfiles/
@@ -59,7 +70,7 @@ clear
 # Password
 #
 
-echo "Set root password"
+echo "${GREEN}Set root password  ${ENDCOLOR}"
 echo "This script creates a random password - use it, or not"
 randompasswd=$(</dev/urandom tr -dc 'A-Za-z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_`{|}~' | head -c 44  ; echo)
 echo "Random Password  - mark it once, right mouse klick, enter, and again !"
@@ -72,7 +83,7 @@ clear
 # SSH
 #
 
-echo "Set ssh config"
+echo "${GREEN}Set ssh config  ${ENDCOLOR}"
 read -p "Choose your SSH Port: (default 22) " -e -i 2222 sshport
 ssh-keygen -f /etc/ssh/key1rsa -t rsa -b 4096 -N ""
 ssh-keygen -f /etc/ssh/key2ecdsa -t ecdsa -b 521 -N ""
@@ -99,7 +110,7 @@ clear
 # Network
 #
 
-echo "Set network config"
+echo "${GREEN}Set network config  ${ENDCOLOR}"
 read -p "Your hostname :" -e -i remotehost hostnamex
 hostnamectl set-hostname $hostnamex
 if [ -f "/etc/netplan/50-cloud-init.yaml" ]; then
@@ -113,7 +124,7 @@ fi
 # UFW
 #
 
-echo "Set ufw config"
+echo "${GREEN}Set ufw config  ${ENDCOLOR}"
 ufw default deny incoming
 ufw limit $sshport/tcp
 clear
@@ -122,7 +133,7 @@ clear
 # fail2ban
 #
 
-echo "Set fail2ban for ssh"
+echo "${GREEN}Set fail2ban for ssh ${ENDCOLOR}"
 echo "
 [sshd]
 enabled = true
@@ -142,7 +153,7 @@ clear
 # Updates
 #
 
-echo "unattended-upgrades"
+echo "${GREEN}unattended-upgrades  ${ENDCOLOR}"
 mv /etc/apt/apt.conf.d/50unattended-upgrades /root/script_backupfiles/50unattended-upgrades.orig
 echo 'Unattended-Upgrade::Allowed-Origins {
         "${distro_id}:${distro_codename}";
@@ -180,7 +191,7 @@ clear
 #misc
 #
 
-echo "Clear/Change some stuff"
+echo "${GREEN}Clear/Change some stuff ${ENDCOLOR}"
 
 if [[ -e /etc/update-motd.d/10-help-text ]]; then
     chmod -x /etc/update-motd.d/10-help-text
@@ -211,7 +222,7 @@ clear
 #
 
 systemctl enable fail2ban.service
-read -p "Press enter to reboot"
+read -p "${GREEN}Press enter to reboot  ${ENDCOLOR}"
 ufw --force enable
 ufw reload
 reboot
