@@ -54,9 +54,11 @@ apt update && apt upgrade -y && apt autoremove -y
 apt install ufw fail2ban  unattended-upgrades apt-listchanges -y 
 mkdir /root/script_backupfiles/
 clear
+
 #
 # Password
 #
+
 echo "Set root password"
 echo "This script creates a random password - use it, or not"
 randompasswd=$(</dev/urandom tr -dc 'A-Za-z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_`{|}~' | head -c 44  ; echo)
@@ -65,9 +67,11 @@ echo "$randompasswd"
 passwd
 read -p "Press enter to continue / on fail press CRTL+C"
 clear
+
 #
 # SSH
 #
+
 echo "Set ssh config"
 read -p "Choose your SSH Port: (default 22) " -e -i 2222 sshport
 ssh-keygen -f /etc/ssh/key1rsa -t rsa -b 4096 -N ""
@@ -90,9 +94,11 @@ PrintMotd no
 AcceptEnv LANG LC_*
 Subsystem sftp  internal-sftp" >> /etc/ssh/sshd_config
 clear
+
 #
 # Network
 #
+
 echo "Set network config"
 read -p "Your hostname :" -e -i remotehost hostnamex
 hostnamectl set-hostname $hostnamex
@@ -102,21 +108,20 @@ fi
 if [ -f "/etc/network/interfaces.d/50-cloud-init.cfg" ]; then
    nano /etc/network/interfaces.d/50-cloud-init.cfg
 fi
-if [ -f "/etc/network/interfaces" ]; then
-   nano /etc/network/interfaces
-fi
 
-clear
 #
 # UFW
 #
+
 echo "Set ufw config"
 ufw default deny incoming
 ufw limit $sshport/tcp
 clear
+
 #
 # fail2ban
 #
+
 echo "Set fail2ban for ssh"
 echo "
 [sshd]
@@ -132,9 +137,11 @@ bantime = 18w
 " >> /etc/fail2ban/jail.d/ssh.conf
 sed -i "/blocktype = reject/c\blocktype = deny" /etc/fail2ban/action.d/ufw.conf
 clear
+
 #
 # Updates
 #
+
 echo "unattended-upgrades"
 mv /etc/apt/apt.conf.d/50unattended-upgrades /root/script_backupfiles/50unattended-upgrades.orig
 echo 'Unattended-Upgrade::Allowed-Origins {
@@ -150,7 +157,7 @@ Unattended-Upgrade::Package-Blacklist {
 Unattended-Upgrade::DevRelease "false";
 Unattended-Upgrade::Remove-Unused-Dependencies "true";
 Unattended-Upgrade::Automatic-Reboot "true";
-Unattended-Upgrade::Automatic-Reboot-Time "02:22";
+Unattended-Upgrade::Automatic-Reboot-Time "01:30";
 ' >> /etc/apt/apt.conf.d/50unattended-upgrades
 
 echo '
@@ -168,13 +175,22 @@ sed -i "s@6,18:00@9,23:00@" /lib/systemd/system/apt-daily.timer
 sed -i "s@12h@1h@" /lib/systemd/system/apt-daily.timer
 sed -i "s@6:00@1:00@" /lib/systemd/system/apt-daily-upgrade.timer
 clear
+
 #
 #misc
 #
+
 echo "Clear/Change some stuff"
-chmod -x /etc/update-motd.d/10-help-text
-chmod -x /etc/update-motd.d/50-motd-news
-chmod -x /etc/update-motd.d/80-livepatch
+
+if [[ -e /etc/update-motd.d/10-help-text ]]; then
+    chmod -x /etc/update-motd.d/10-help-text
+fi
+if [[ -e //etc/update-motd.d/50-motd-news ]]; then
+    chmod -x /etc/update-motd.d/50-motd-news
+fi
+if [[ -e /etc/update-motd.d/80-livepatch ]]; then
+    chmod -x /etc/update-motd.d/80-livepatch
+fi
 
 echo '#!/bin/sh
 runtime1=$(uptime -s)
@@ -186,12 +202,14 @@ echo ""
 ' >> /etc/update-motd.d/99-base01
 chmod +x /etc/update-motd.d/99-base01
 echo "base_server script installed from :
-https://github.com/zzzkeil/base_setups/blob/master/base_setup.sh
+https://github.com/zzzkeil/base_setups
 " > /root/base_setup.README
 clear
+
 #
 # END
 #
+
 systemctl enable fail2ban.service
 read -p "Press enter to reboot"
 ufw --force enable
