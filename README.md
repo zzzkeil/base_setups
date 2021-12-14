@@ -2,7 +2,7 @@
 
 short description:
 
-## **base secure setup for ubuntu server 20.04 in 3 minutes** 
+## **base secure setup for Debian 11 and Ubuntu (Server) 20.04 in 3 minutes** 
 * setup root password with random 44 long password
 * setup ssh port and keys and config
 * setup ufw
