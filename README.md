@@ -15,7 +15,7 @@ short description:
 * Copy the lines for your system below, and run it and follow the instructions  
 
 
-###### For Ubuntu 18.04 / 20.04:
+###### For Debian 11 and Ubuntu 20.04:
 ```
 wget -O  base_setup.sh https://raw.githubusercontent.com/zzzkeil/base_setups/master/base_setup.sh
 chmod +x base_setup.sh
