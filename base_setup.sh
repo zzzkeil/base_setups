@@ -15,10 +15,10 @@ clear
 echo -e " ${GRAYB}##############################################################################${ENDCOLOR}"
 echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}Base server config for Debian 11 and Ubuntu 20.04                          ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
 echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}This script installs an configure :                                        ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
-echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}passwd,ssh,fail2ban,ufw,network,unattended-upgrades                        ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}password,ssh,fail2ban,ufw,network,unattended-upgrades                      ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
 echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}Infos @ https://github.com/zzzkeil/base_setups                             ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
 echo -e " ${GRAYB}##############################################################################${ENDCOLOR}"
-echo -e " ${GRAYB}#${ENDCOLOR}                 Version 2021.12.12 - changelog on github                   ${GRAYB}#${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR}                 Version 2022.01.05 - changelog on github                   ${GRAYB}#${ENDCOLOR}"
 echo -e " ${GRAYB}##############################################################################${ENDCOLOR}"
 echo ""
 echo ""
@@ -69,15 +69,52 @@ clear
 #
 # Password
 #
-
-echo -e "${GREEN}Set root password  ${ENDCOLOR}"
-echo "This script creates a random password - use it, or not"
-randompasswd=$(</dev/urandom tr -dc 'A-Za-z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_`{|}~' | head -c 44  ; echo)
-echo "Random Password  - mark it once, right mouse klick, enter, and again !"
-echo "$randompasswd"
-passwd
-read -p "Press enter to continue / on fail press CRTL+C"
+echo ""
+echo ""
+echo -e " ${GREEN}Set a secure root password ${ENDCOLOR}"
+echo ""
+echo " This script can create a random secure root password."
+echo ""
+echo ""
+echo  -e " ${GRAY}Press any key  -  to ${RED}NOT${ENDCOLOR} change root password ${ENDCOLOR}"
+echo ""
+echo  -e " ${GRAY}Press [C]  -  to create a secure random root password ${ENDCOLOR}"
+read -p "" -n 1 -r
+echo ""
+echo ""
+if [[ ! $REPLY =~ ^[Cc]$ ]]
+then
+newpass=0
+echo " Ok no password change"
+echo " Get sure you use a secure password ! "
+echo ""
+echo ""
+read -p "Press enter to continue"
+else
+newpass=1
+randompasswd=$(</dev/urandom tr -dc 'A-Za-z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_`{|}~' | head -c 64  ; echo)
+echo "root:$randompasswd" | chpasswd
+echo ""
+echo ""
+echo " Your new root password is : "
+echo ""
+echo -e "${GREEN}$randompasswd${ENDCOLOR}  <<< copy your new green password "
+echo ""
+echo -e "${YELLOW} !!! Save this password now !!! ${ENDCOLOR}"
+echo " Use your mouse to mark the green password (copy), and paste it on your secure location (other computer/passwordmanager/...) !"
+echo ""
+echo " if you not save this password, you can never loggin again, be carefull"
+echo ""
+echo ""
+read -p "Press enter to continue"
+echo ""
+echo " just one more time. "
+echo " if you not save this password, you can never loggin again, be carefull"
+echo ""
+echo ""
+read -p "Press enter to continue"
 clear
+fi
 
 #
 # SSH
@@ -215,13 +252,26 @@ chmod +x /etc/update-motd.d/99-base01
 echo "base_server script installed from :
 https://github.com/zzzkeil/base_setups
 " > /root/base_setup.README
-clear
 
 #
 # END
 #
 
 systemctl enable fail2ban.service
+clear
+echo ""
+echo ""
+if [[ "$newpass" -ne 0 ]]; then
+echo -e " ${YELLOW}!!! REMEMBER - you set a new root password :"
+echo  ""
+echo -e "${GREEN}$randompasswd${ENDCOLOR}  <<< copy your new green password "
+echo ""
+echo -e " ${RED}if you not save this password, you can never loggin again, be carefull ${ENDCOLOR}"
+echo ""
+echo ""
+fi
+echo ""
+echo ""
 echo -e "${GREEN}Press enter to reboot  ${ENDCOLOR}"
 read -p ""
 ufw --force enable
