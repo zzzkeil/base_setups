@@ -3,7 +3,7 @@
 short description:
 
 ## **base secure setup for Debian 11 and Ubuntu (Server) 20.04 in 3 minutes** 
-* setup root password with random 44 long password
+* setup root password with random 64 long password , or leave yours
 * setup ssh port and keys and config
 * setup ufw
 * setup hostname
