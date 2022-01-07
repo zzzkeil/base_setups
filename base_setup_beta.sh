@@ -85,11 +85,14 @@ echo ""
 if [[ ! $REPLY =~ ^[Cc]$ ]]
 then
 newpass=0
-echo "no root password change - get sure you use a secure password, or manualy change to ssh key-based authentication"
+echo " Ok no password change"
+echo " Get sure you use a secure password ! "
+echo ""
+echo ""
 read -p "Press enter to continue"
 else
 newpass=1
-randompasswd=$(</dev/urandom tr -dc 'A-Za-z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_`{|}~' | head -c 44  ; echo)
+randompasswd=$(</dev/urandom tr -dc 'A-Za-z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_`{|}~' | head -c 64  ; echo)
 echo "root:$randompasswd" | chpasswd
 echo ""
 echo ""
