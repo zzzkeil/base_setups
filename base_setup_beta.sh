@@ -18,7 +18,7 @@ echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}This script installs an configure :      
 echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}password,ssh,fail2ban,ufw,network,unattended-upgrades                      ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
 echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}Infos @ https://github.com/zzzkeil/base_setups                             ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
 echo -e " ${GRAYB}##############################################################################${ENDCOLOR}"
-echo -e " ${GRAYB}#${ENDCOLOR}                 Version 2022.01.05 - changelog on github                   ${GRAYB}#${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR}                 Version 2022.05.07 - changelog on github                   ${GRAYB}#${ENDCOLOR}"
 echo -e " ${GRAYB}##############################################################################${ENDCOLOR}"
 echo ""
 echo ""
@@ -61,6 +61,10 @@ fi
 #
 
 echo -e "${GREEN}apt update upgrade and install ${ENDCOLOR}"
+if [[ "$VERSION_ID" = '22.04' ]]; then
+  apt remove needrestart -y
+fi
+
 apt update && apt upgrade -y && apt autoremove -y
 apt install ufw fail2ban  unattended-upgrades apt-listchanges -y 
 mkdir /root/script_backupfiles/
