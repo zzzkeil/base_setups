@@ -191,14 +191,22 @@ clear
 #
 
 #echo -e "${GREEN}unattended-upgrades  ${ENDCOLOR}"
-cp /etc/apt/apt.conf.d/50unattended-upgrades /root/script_backupfiles/50unattended-upgrades.orig
-
-
+#mv /etc/apt/apt.conf.d/50unattended-upgrades /root/script_backupfiles/50unattended-upgrades.orig
+#echo 'Unattended-Upgrade::Allowed-Origins {
+#        "${distro_id}:${distro_codename}";
+#	"${distro_id}:${distro_codename}-security";
+#	"${distro_id}ESM:${distro_codename}";
+#//	"${distro_id}:${distro_codename}-updates";
+#//	"${distro_id}:${distro_codename}-proposed";
+#//	"${distro_id}:${distro_codename}-backports";
+#};
+#Unattended-Upgrade::Package-Blacklist {
+#};
 #Unattended-Upgrade::DevRelease "false";
 #Unattended-Upgrade::Remove-Unused-Dependencies "true";
 #Unattended-Upgrade::Automatic-Reboot "true";
 #Unattended-Upgrade::Automatic-Reboot-Time "01:30";
-
+#' >> /etc/apt/apt.conf.d/50unattended-upgrades
 
 #echo '
 #APT::Periodic::Update-Package-Lists "1";
