@@ -2,7 +2,7 @@
 
 short description:
 
-## **base secure setup for Debian 11 and Ubuntu (Server) 20.04 in 3 minutes** 
+## **base secure setup for Debian 11 and Ubuntu (Server) 20.04 / 22.04 in 3 minutes** 
 * setup root password with random 64 long password , or leave yours
 * setup ssh port and keys and config
 * setup ufw
@@ -11,7 +11,7 @@ short description:
 * setup updates / reboots
 
 ## How to install :  
-* Use a fresh / clean **server** os  ( e.g. Ubuntu 20.04 is tested ) 
+* Use a fresh / clean **server** os 
 * Copy the lines for your system below, and run it and follow the instructions  
 
 
