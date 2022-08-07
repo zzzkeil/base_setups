@@ -1,7 +1,6 @@
 # base_setups
 
-### Project moved to gitlab or codeberg  ( in testing )
-[project home on gitlab for testing](https://gitlab.com/zzzkeil/base_setups)
+### Project moved to codeberg
 
 [project home on codeberg for testing](https://codeberg.org/zzzkeil/base_setups)
 
