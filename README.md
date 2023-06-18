@@ -1,4 +1,4 @@
-# base_setups
+# base_setups ARM64 and X86
 
 ### Project moved to codeberg
 
