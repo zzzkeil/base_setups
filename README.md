@@ -10,3 +10,7 @@ chmod +x base_setup.sh
 
 
 ```
+
+
+changelog :
+one script for debian and fedora  and x86 and arm64
