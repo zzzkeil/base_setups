@@ -16,9 +16,9 @@ echo -e " ${GRAYB}##############################################################
 echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}Base server config for Debian 12 11 and Fedora 38                          ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
 echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}This script installs an configure :                                        ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
 echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}password,ssh,fail2ban,rsyslog,firawalld,network,unattended-upgrades        ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
-echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}Infos @ https://codeberg.org/zzzkeil/base_setups                           ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}Infos @ https://github.com/zzzkeil/base_setups                             ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
 echo -e " ${GRAYB}##############################################################################${ENDCOLOR}"
-echo -e " ${GRAYB}#${ENDCOLOR}           Version 2023.06.24 - no changelog just a testfile                ${GRAYB}#${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR}            Version 2023.06.24 -  changelog on github                    ${GRAYB}#${ENDCOLOR}"
 echo -e " ${GRAYB}##############################################################################${ENDCOLOR}"
 echo ""
 echo ""
@@ -335,7 +335,7 @@ fi
 
 
 echo "base_server script installed from :
-https://codeberg.org/zzzkeil/base_setups
+https://github.com/zzzkeil/base_setups
 " > /root/base_setup.README
 
 #
