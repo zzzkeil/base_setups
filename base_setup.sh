@@ -355,11 +355,13 @@ echo ""
 echo ""
 fi
 echo ""
-echo "Your new settings:"
+echo "Your settings:"
 if [[ "$newpass" = '0' ]]; then
+echo ""
 echo "Your password has not changed "
 fi
-echo "New ssh port is $sshport and open in firewalld"
+echo ""
+echo "New ssh port = $sshport / and open in firewalld"
 echo ""
 echo ""
 echo -e "${GREEN}Press enter to reboot  ${ENDCOLOR}"
