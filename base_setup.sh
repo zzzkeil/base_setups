@@ -322,7 +322,7 @@ chmod +x /etc/update-motd.d/99-base01
 fi
 
 if [[ "$systemos" = 'fedora' ]]; then
-echo '
+echo '#!/bin/sh
 runtime1=$(uptime -s)
 runtime2=$(uptime -p)
 totalban1=$(zgrep 'Ban' /var/log/fail2ban.log* | wc -l)
@@ -331,6 +331,7 @@ echo ""
 echo "Test INFO (maybe wrong count)  -   Total banned IPs from fail2ban : $totalban1 "
 '
 >> /etc/profile.d/motd.sh
+chmod +x /etc/profile.d/motd.sh
 fi
 
 
