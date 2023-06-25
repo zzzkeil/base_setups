@@ -355,8 +355,16 @@ echo ""
 echo ""
 fi
 echo ""
+echo "Your new settings:"
+if [[ "$newpass" = '0' ]]; then
+echo "Your password has not changed "
+fi
+echo "New ssh port is $sshport and open in firewalld"
+echo ""
 echo ""
 echo -e "${GREEN}Press enter to reboot  ${ENDCOLOR}"
+echo ""
+echo ""
 read -p ""
 systemctl enable fail2ban.service
 systemctl enable firewalld
