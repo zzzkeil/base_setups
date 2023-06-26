@@ -316,7 +316,7 @@ runtime2=$(uptime -p)
 totalban1=$(fail2ban-client status sshd | grep "Currently banned")
 echo "System uptime : $runtime1  / $runtime2 "
 echo ""
-echo "$totalban1 ip adresses with fail2ban"
+echo "$totalban1  ip adresses with fail2ban from jail sshd"
 ' >> /etc/update-motd.d/99-base01
 chmod +x /etc/update-motd.d/99-base01
 fi
@@ -328,7 +328,7 @@ runtime2=$(uptime -p)
 totalban1=$(fail2ban-client status sshd | grep "Currently banned")
 echo "System uptime : $runtime1  / $runtime2 "
 echo ""
-echo "$totalban1 ip adresses with fail2ban"
+echo "$totalban1  ip adresses with fail2ban from jail sshd"
 ' >> /etc/profile.d/motd.sh
 chmod +x /etc/profile.d/motd.sh
 fi
