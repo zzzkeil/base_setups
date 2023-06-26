@@ -97,7 +97,7 @@ fi
 
 if [[ "$systemos" = 'dnf' ]]; then
 dnf upgrade --refresh -y && dnf autoremove -y
-dnf install firewalld rsyslog fail2ban dnf-automatic -y
+dnf install nano firewalld rsyslog fail2ban dnf-automatic -y
 fi
 
 mkdir /root/script_backupfiles/
