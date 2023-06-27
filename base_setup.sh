@@ -254,23 +254,16 @@ echo -e "${GREEN}unattended-upgrades  ${ENDCOLOR}"
 
 if [[ "$systemos" = 'debian' ]]; then
 mv /etc/apt/apt.conf.d/50unattended-upgrades /root/script_backupfiles/50unattended-upgrades.orig
-echo 'Unattended-Upgrade::Origins-Pattern {
-//      "origin=Debian,codename=${distro_codename}-updates";
-//      "origin=Debian,codename=${distro_codename}-proposed-updates";
-        "origin=Debian,codename=${distro_codename},label=Debian";
-        "origin=Debian,codename=${distro_codename},label=Debian-Security";
-        "origin=Debian,codename=${distro_codename}-security,label=Debian-Security";
-
-//      "o=Debian,a=stable";
-//      "o=Debian,a=stable-updates";
-//      "o=Debian,a=proposed-updates";
-//      "o=Debian Backports,a=${distro_codename}-backports,l=Debian Backports";
+echo 'Unattended-Upgrade::Allowed-Origins {
+        "${distro_id}:${distro_codename}";
+	"${distro_id}:${distro_codename}-security";
+	"${distro_id}ESM:${distro_codename}";
+//	"${distro_id}:${distro_codename}-updates";
+//	"${distro_id}:${distro_codename}-proposed";
+//	"${distro_id}:${distro_codename}-backports";
 };
-
 Unattended-Upgrade::Package-Blacklist {
-
 };
-
 Unattended-Upgrade::DevRelease "false";
 Unattended-Upgrade::Remove-Unused-Dependencies "true";
 Unattended-Upgrade::Automatic-Reboot "true";
