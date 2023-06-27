@@ -52,7 +52,7 @@ echo -e "${GREEN}OS check ${ENDCOLOR}"
 if [[ "$ID" = 'debian' ]]; then
  if [[ "$VERSION_ID" = '12' ]] || [[ "$VERSION_ID" = '11' ]]; then
    echo -e "${GREEN}OS = Debian ${ENDCOLOR}"
-   systemos=apt
+   systemos=debian
    fi
 fi
 
@@ -60,7 +60,7 @@ fi
 if [[ "$ID" = 'fedora' ]]; then
  if [[ "$VERSION_ID" = '38' ]] || [[ "$VERSION_ID" = '37' ]]; then
    echo -e "${GREEN}OS = Fedora ${ENDCOLOR}"
-   systemos=dnf
+   systemos=fedora
    fi
 fi
 
@@ -69,7 +69,7 @@ fi
 if [[ "$ID" = 'rocky' ]]; then
  if [[ "$ROCKY_SUPPORT_PRODUCT" = 'Rocky-Linux-9' ]]; then
    echo -e "${GREEN}OS = Rocky Linux ${ENDCOLOR}"
-   systemos=dnf
+   systemos=rocky
  fi
 fi
 
@@ -88,18 +88,20 @@ fi
 #
 echo -e "${GREEN}update upgrade and install ${ENDCOLOR}"
 
-if [[ "$systemos" = 'apt' ]]; then
+if [[ "$systemos" = 'debian' ]]; then
 apt update && apt upgrade -y && apt autoremove -y
 apt remove ufw -y
 apt install firewalld fail2ban rsyslog unattended-upgrades apt-listchanges -y
 fi
 
-
-if [[ "$systemos" = 'dnf' ]]; then
+if [[ "$systemos" = 'fedora' ]]; then
 dnf upgrade --refresh -y && dnf autoremove -y
- if [[ "$ROCKY_SUPPORT_PRODUCT" = 'Rocky-Linux-9' ]]; then
- dnf install epel-release -y
- fi
+dnf install nano firewalld rsyslog fail2ban dnf-automatic -y
+fi
+
+if [[ "$systemos" = 'rocky' ]]; then
+dnf upgrade --refresh -y && dnf autoremove -y
+dnf install epel-release -y
 dnf install tar nano firewalld rsyslog fail2ban dnf-automatic -y
 fi
 
@@ -236,7 +238,7 @@ clear
 #
 echo -e "${GREEN}unattended-upgrades  ${ENDCOLOR}"
 
-if [[ "$systemos" = 'apt' ]]; then
+if [[ "$systemos" = 'debian' ]]; then
 mv /etc/apt/apt.conf.d/50unattended-upgrades /root/script_backupfiles/50unattended-upgrades.orig
 echo 'Unattended-Upgrade::Origins-Pattern {
 //      "origin=Debian,codename=${distro_codename}-updates";
@@ -278,7 +280,7 @@ clear
 fi
 
 
-if [[ "$systemos" = 'dnf' ]]; then
+if [[ "$systemos" = 'fedora' ]] || [[ "$systemos" = 'rocky' ]]; then
 mv /etc/dnf/automatic.conf /root/script_backupfiles/automatic.conf.orig
 echo '
 [commands]
@@ -322,7 +324,7 @@ fi
 #
 echo -e "${GREEN}Clear/Change some stuff ${ENDCOLOR}"
 
-if [[ "$systemos" = 'apt' ]]; then
+if [[ "$systemos" = 'debian' ]]; then
 echo '#!/bin/sh
 runtime1=$(uptime -s)
 runtime2=$(uptime -p)
@@ -336,7 +338,7 @@ echo "$totalban1 ip adresses with fail2ban from jail sshd"
 chmod +x /etc/update-motd.d/99-base01
 fi
 
-if [[ "$systemos" = 'dnf' ]]; then
+if [[ "$systemos" = 'fedora' ]] || [[ "$systemos" = 'rocky' ]]; then
 echo '#!/bin/sh
 runtime1=$(uptime -s)
 runtime2=$(uptime -p)
