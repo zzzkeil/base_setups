@@ -12,14 +12,14 @@ GRAYB="\e[47m"
 ENDCOLOR="\e[0m"
 
 clear
-echo -e " ${GRAYB}########################################################################################################${ENDCOLOR}"
-echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}Base server config for Debian 12, Fedora 38, Rocky Linux 9, CentOS Stream 9, AlmaLinux 9             ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
-echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}This script configure / install                                                                      ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
-echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}password, ssh, fail2ban, rsyslog, firawalld, unattended-upgrades / dnf-automatic                     ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
-echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}Infos @ https://github.com/zzzkeil/base_setups                                                       ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
-echo -e " ${GRAYB}########################################################################################################${ENDCOLOR}"
-echo -e " ${GRAYB}#${ENDCOLOR}            Version 2023.06.27 -  changelog on github                                                 ${GRAYB}#${ENDCOLOR}"
-echo -e " ${GRAYB}########################################################################################################${ENDCOLOR}"
+echo -e " ${GRAYB}##################################################################################################################${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}Base server config for Debian 12, Ubuntu 22.04, Fedora 38, Rocky Linux 9, CentOS Stream 9, AlmaLinux 9         ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}This script configure / install                                                                                ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}password, ssh, fail2ban, rsyslog, firawalld, unattended-upgrades / dnf-automatic                               ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}Infos @ https://github.com/zzzkeil/base_setups                                                                 ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
+echo -e " ${GRAYB}##################################################################################################################${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR}            Version 2023.06.27 -  changelog on github                                                           ${GRAYB}#${ENDCOLOR}"
+echo -e " ${GRAYB}##################################################################################################################${ENDCOLOR}"
 echo ""
 echo ""
 echo ""
@@ -53,6 +53,13 @@ if [[ "$ID" = 'debian' ]]; then
  if [[ "$VERSION_ID" = '12' ]]; then
    echo -e "${GREEN}OS = Debian ${ENDCOLOR}"
    systemos=debian
+   fi
+fi
+
+if [[ "$ID" = 'ubuntu' ]]; then
+ if [[ "$VERSION_ID" = '22.04' ]]; then
+   echo -e "${GREEN}OS = Debian ${ENDCOLOR}"
+   systemos=ubuntu
    fi
 fi
 
@@ -105,6 +112,12 @@ echo -e "${GREEN}update upgrade and install ${ENDCOLOR}"
 if [[ "$systemos" = 'debian' ]]; then
 apt update && apt upgrade -y && apt autoremove -y
 apt remove ufw -y
+apt install firewalld fail2ban rsyslog unattended-upgrades apt-listchanges -y
+fi
+
+if [[ "$systemos" = 'ubuntu' ]]; then
+apt update && apt upgrade -y && apt autoremove -y
+apt remove ufw needrestart -y
 apt install firewalld fail2ban rsyslog unattended-upgrades apt-listchanges -y
 fi
 
@@ -252,7 +265,7 @@ clear
 #
 echo -e "${GREEN}unattended-upgrades  ${ENDCOLOR}"
 
-if [[ "$systemos" = 'debian' ]]; then
+if [[ "$systemos" = 'debian' ]] || [[ "$systemos" = 'ubuntu' ]]; then
 mv /etc/apt/apt.conf.d/50unattended-upgrades /root/script_backupfiles/50unattended-upgrades.orig
 echo 'Unattended-Upgrade::Allowed-Origins {
         "${distro_id}:${distro_codename}";
@@ -331,7 +344,7 @@ fi
 #
 echo -e "${GREEN}Clear/Change some stuff ${ENDCOLOR}"
 
-if [[ "$systemos" = 'debian' ]]; then
+if [[ "$systemos" = 'debian' ]] || [[ "$systemos" = 'ubuntu' ]]; then
 echo '#!/bin/sh
 runtime1=$(uptime -s)
 runtime2=$(uptime -p)
