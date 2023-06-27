@@ -58,7 +58,7 @@ fi
 
 if [[ "$ID" = 'ubuntu' ]]; then
  if [[ "$VERSION_ID" = '22.04' ]]; then
-   echo -e "${GREEN}OS = Debian ${ENDCOLOR}"
+   echo -e "${GREEN}OS = Ubuntu ${ENDCOLOR}"
    systemos=ubuntu
    fi
 fi
