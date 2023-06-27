@@ -100,7 +100,7 @@ dnf upgrade --refresh -y && dnf autoremove -y
  if [[ "$ROCKY_SUPPORT_PRODUCT" = 'Rocky-Linux-9' ]]; then
  dnf install epel-release -y
  fi
-dnf install nano firewalld rsyslog fail2ban dnf-automatic -y
+dnf install tar nano firewalld rsyslog fail2ban dnf-automatic -y
 fi
 
 mkdir /root/script_backupfiles/
