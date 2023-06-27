@@ -191,13 +191,13 @@ echo -e "${GREEN}Set network config  ${ENDCOLOR}"
 read -p "Your hostname :" -e -i remotehost hostnamex
 hostnamectl set-hostname $hostnamex
 
-if [ -f "/etc/network/interfaces.d/50-cloud-init.cfg" ]; then
-   nano /etc/network/interfaces.d/50-cloud-init.cfg
-fi
+#if [ -f "/etc/network/interfaces.d/50-cloud-init.cfg" ]; then
+#   nano /etc/network/interfaces.d/50-cloud-init.cfg
+#fi
 
-if [ -f "/etc/NetworkManager/system-connections/cloud-init-eth0.nmconnection" ]; then
-   nano /etc/NetworkManager/system-connections/cloud-init-eth0.nmconnection
-fi
+#if [ -f "/etc/NetworkManager/system-connections/cloud-init-eth0.nmconnection" ]; then
+#   nano /etc/NetworkManager/system-connections/cloud-init-eth0.nmconnection
+#fi
 clear
 
 #
