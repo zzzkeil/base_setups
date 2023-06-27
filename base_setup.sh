@@ -328,12 +328,12 @@ if [[ "$systemos" = 'debian' ]]; then
 echo '#!/bin/sh
 runtime1=$(uptime -s)
 runtime2=$(uptime -p)
-totalban1=$(fail2ban-client status sshd | grep "Currently banned")
+totalban1=$(fail2ban-client status sshd | grep "Currently banned" | sed -e "s/^\s*//" -e "/^$/d")
+echo ""
 echo "System uptime : $runtime1  / $runtime2 "
 echo ""
 echo "$totalban1 ip adresses with fail2ban from jail sshd"
-
-
+echo ""
 ' >> /etc/update-motd.d/99-base01
 chmod +x /etc/update-motd.d/99-base01
 fi
@@ -342,12 +342,12 @@ if [[ "$systemos" = 'fedora' ]] || [[ "$systemos" = 'rocky' ]]; then
 echo '#!/bin/sh
 runtime1=$(uptime -s)
 runtime2=$(uptime -p)
-totalban1=$(fail2ban-client status sshd | grep "Currently banned")
+totalban1=$(fail2ban-client status sshd | grep "Currently banned" | sed -e "s/^\s*//" -e "/^$/d")
+echo ""
 echo "System uptime : $runtime1  / $runtime2 "
 echo ""
 echo "$totalban1 ip adresses with fail2ban from jail sshd"
-
-
+echo ""
 ' >> /etc/profile.d/motd.sh
 chmod +x /etc/profile.d/motd.sh
 fi
