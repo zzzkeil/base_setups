@@ -4,7 +4,9 @@
 ### password, ssh, fail2ban, rsyslog, firawalld, unattended-upgrades / dnf-automatic 
 
 changelog :
-one script for x86 and arm64 on Debian 12, Fedora 38, Rocky Linux 9, CentOS Stream 9, AlmaLinux 9
+one script for 
+- x86 and arm64 
+- Debian 12, Fedora 38, Rocky Linux 9, CentOS Stream 9, AlmaLinux 9
 
 ### Setup :
 
