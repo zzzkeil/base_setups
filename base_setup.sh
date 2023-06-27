@@ -13,12 +13,12 @@ ENDCOLOR="\e[0m"
 
 clear
 echo -e " ${GRAYB}########################################################################################################${ENDCOLOR}"
-echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}Base server config for Debian 12, Fedora 38, Rocky Linux 9, CentOS Stream 9,                         ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
-echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}This script installs an configure :                                                                  ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
-echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}password,ssh,fail2ban,rsyslog,firawalld,network,unattended-upgrades                                  ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}Base server config for Debian 12, Fedora 38, Rocky Linux 9, CentOS Stream 9, AlmaLinux 9             ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}This script configure / install                                                                      ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}password, ssh, fail2ban, rsyslog, firawalld, unattended-upgrades / dnf-automatic                     ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
 echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}Infos @ https://github.com/zzzkeil/base_setups                                                       ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
 echo -e " ${GRAYB}########################################################################################################${ENDCOLOR}"
-echo -e " ${GRAYB}#${ENDCOLOR}            Version 2023.06.24 -  changelog on github                                                 ${GRAYB}#${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR}            Version 2023.06.27 -  changelog on github                                                 ${GRAYB}#${ENDCOLOR}"
 echo -e " ${GRAYB}########################################################################################################${ENDCOLOR}"
 echo ""
 echo ""
@@ -72,6 +72,14 @@ if [[ "$ID" = 'rocky' ]]; then
 fi
 
 ### testing .... should run
+if [[ "$ID" = 'almalinux' ]]; then
+ if [[ "$ALMALINUX_MANTISBT_PROJECT" = 'AlmaLinux-9' ]]; then
+   echo -e "${GREEN}OS = AlmaLinux ${ENDCOLOR}"
+   systemos=almalinux
+ fi
+fi
+
+### testing .... should run
 if [[ "$ID" = 'centos' ]]; then
  if [[ "$VERSION_ID" = '9' ]]; then
    echo -e "${GREEN}OS = CentOS Stream ${ENDCOLOR}"
@@ -105,17 +113,12 @@ dnf upgrade --refresh -y && dnf autoremove -y
 dnf install nano firewalld rsyslog fail2ban dnf-automatic -y
 fi
 
-if [[ "$systemos" = 'rocky' ]]; then
+if [[ "$systemos" = 'rocky' ]] || [[ "$systemos" = 'centos' ]] || [[ "$systemos" = 'almalinux' ]]; then
 dnf upgrade --refresh -y && dnf autoremove -y
 dnf install epel-release -y
 dnf install tar nano firewalld rsyslog fail2ban dnf-automatic -y
 fi
 
-if [[ "$systemos" = 'centos' ]]; then
-dnf upgrade --refresh -y && dnf autoremove -y
-dnf install epel-release -y
-dnf install tar nano firewalld rsyslog fail2ban dnf-automatic -y
-fi
 mkdir /root/script_backupfiles/
 clear
 
@@ -291,11 +294,11 @@ clear
 fi
 
 
-if [[ "$systemos" = 'fedora' ]] || [[ "$systemos" = 'rocky' ]] || [[ "$systemos" = 'centos' ]]; then
+if [[ "$systemos" = 'fedora' ]] || [[ "$systemos" = 'rocky' ]] || [[ "$systemos" = 'centos' ]] || [[ "$systemos" = 'almalinux' ]]; then
 mv /etc/dnf/automatic.conf /root/script_backupfiles/automatic.conf.orig
 echo '
 [commands]
-upgrade_type = default
+upgrade_type = security
 # default or security
 
 random_sleep = 0
@@ -349,7 +352,7 @@ echo ""
 chmod +x /etc/update-motd.d/99-base01
 fi
 
-if [[ "$systemos" = 'fedora' ]] || [[ "$systemos" = 'rocky' ]] || [[ "$systemos" = 'centos' ]]; then
+if [[ "$systemos" = 'fedora' ]] || [[ "$systemos" = 'rocky' ]] || [[ "$systemos" = 'centos' ]] || [[ "$systemos" = 'almalinux' ]]; then
 echo '#!/bin/sh
 runtime1=$(uptime -s)
 runtime2=$(uptime -p)
