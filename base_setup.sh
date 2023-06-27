@@ -12,14 +12,14 @@ GRAYB="\e[47m"
 ENDCOLOR="\e[0m"
 
 clear
-echo -e " ${GRAYB}##############################################################################${ENDCOLOR}"
-echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}Base server config for Debian 12, Fedora 38, (Rocky Linux 9 in testing)    ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
-echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}This script installs an configure :                                        ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
-echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}password,ssh,fail2ban,rsyslog,firawalld,network,unattended-upgrades        ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
-echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}Infos @ https://github.com/zzzkeil/base_setups                             ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
-echo -e " ${GRAYB}##############################################################################${ENDCOLOR}"
-echo -e " ${GRAYB}#${ENDCOLOR}            Version 2023.06.24 -  changelog on github                       ${GRAYB}#${ENDCOLOR}"
-echo -e " ${GRAYB}##############################################################################${ENDCOLOR}"
+echo -e " ${GRAYB}########################################################################################################${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}Base server config for Debian 12, Fedora 38, Rocky Linux 9, CentOS Stream 9,                         ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}This script installs an configure :                                                                  ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}password,ssh,fail2ban,rsyslog,firawalld,network,unattended-upgrades                                  ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}Infos @ https://github.com/zzzkeil/base_setups                                                       ${ENDCOLOR}${GRAYB}#${ENDCOLOR}"
+echo -e " ${GRAYB}########################################################################################################${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR}            Version 2023.06.24 -  changelog on github                                                 ${GRAYB}#${ENDCOLOR}"
+echo -e " ${GRAYB}########################################################################################################${ENDCOLOR}"
 echo ""
 echo ""
 echo ""
@@ -50,26 +50,32 @@ echo -e "${GREEN}OS check ${ENDCOLOR}"
 . /etc/os-release
 
 if [[ "$ID" = 'debian' ]]; then
- if [[ "$VERSION_ID" = '12' ]] || [[ "$VERSION_ID" = '11' ]]; then
+ if [[ "$VERSION_ID" = '12' ]]; then
    echo -e "${GREEN}OS = Debian ${ENDCOLOR}"
    systemos=debian
    fi
 fi
 
-
 if [[ "$ID" = 'fedora' ]]; then
- if [[ "$VERSION_ID" = '38' ]] || [[ "$VERSION_ID" = '37' ]]; then
+ if [[ "$VERSION_ID" = '38' ]]; then
    echo -e "${GREEN}OS = Fedora ${ENDCOLOR}"
    systemos=fedora
    fi
 fi
 
-
-### Just testing ....
+### testing .... should run
 if [[ "$ID" = 'rocky' ]]; then
  if [[ "$ROCKY_SUPPORT_PRODUCT" = 'Rocky-Linux-9' ]]; then
    echo -e "${GREEN}OS = Rocky Linux ${ENDCOLOR}"
    systemos=rocky
+ fi
+fi
+
+### testing .... should run
+if [[ "$ID" = 'centos' ]]; then
+ if [[ "$VERSION_ID" = '9' ]]; then
+   echo -e "${GREEN}OS = CentOS Stream ${ENDCOLOR}"
+   systemos=centos
  fi
 fi
 
@@ -105,6 +111,11 @@ dnf install epel-release -y
 dnf install tar nano firewalld rsyslog fail2ban dnf-automatic -y
 fi
 
+if [[ "$systemos" = 'centos' ]]; then
+dnf upgrade --refresh -y && dnf autoremove -y
+dnf install epel-release -y
+dnf install tar nano firewalld rsyslog fail2ban dnf-automatic -y
+fi
 mkdir /root/script_backupfiles/
 clear
 
@@ -280,7 +291,7 @@ clear
 fi
 
 
-if [[ "$systemos" = 'fedora' ]] || [[ "$systemos" = 'rocky' ]]; then
+if [[ "$systemos" = 'fedora' ]] || [[ "$systemos" = 'rocky' ]] || [[ "$systemos" = 'centos' ]]; then
 mv /etc/dnf/automatic.conf /root/script_backupfiles/automatic.conf.orig
 echo '
 [commands]
@@ -338,7 +349,7 @@ echo ""
 chmod +x /etc/update-motd.d/99-base01
 fi
 
-if [[ "$systemos" = 'fedora' ]] || [[ "$systemos" = 'rocky' ]]; then
+if [[ "$systemos" = 'fedora' ]] || [[ "$systemos" = 'rocky' ]] || [[ "$systemos" = 'centos' ]]; then
 echo '#!/bin/sh
 runtime1=$(uptime -s)
 runtime2=$(uptime -p)
