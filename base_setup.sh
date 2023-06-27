@@ -84,7 +84,7 @@ fi
 if [[ "$systemos" = '' ]]; then
    echo ""
    echo ""
-   echo -e "${RED}This script is only for Debian 12 / 11  -  Fedora 38 / 37 -  Rocky Linux 9.x !${ENDCOLOR}"
+   echo -e "${RED}This script is only for Debian 12, Fedora 38, Rocky Linux 9, CentOS Stream 9 !${ENDCOLOR}"
    exit 1
 fi
 
