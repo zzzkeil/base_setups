@@ -140,21 +140,29 @@ fi
 
 
 
-
-
-
-
-
 if [[ "$systemos" = 'fedora' ]]; then
-dnf upgrade --refresh -y && dnf autoremove -y
+dnf remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-selinux docker-engine-selinux docker-engine -y
+dnf install dnf-plugins-core -y
+dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+systemctl enable docker.service
+systemctl enable containerd.service
+systemctl start docker.service
+systemctl start containerd.service
 
 fi
 
+##maybe the same as fedora ??......
 if [[ "$systemos" = 'rocky' ]] || [[ "$systemos" = 'centos' ]] || [[ "$systemos" = 'almalinux' ]]; then
-dnf upgrade --refresh -y && dnf autoremove -y
+dnf remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-selinux docker-engine-selinux docker-engine -y
+dnf install dnf-plugins-core -y
+dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+systemctl enable docker.service
+systemctl enable containerd.service
+systemctl start docker.service
+systemctl start containerd.service
 
 fi
 
-mkdir /root/script_backupfiles/
-clear
-
+############################################################## more to come :)
