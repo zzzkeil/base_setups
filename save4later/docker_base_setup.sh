@@ -111,7 +111,7 @@ echo -e "${GREEN}OS add docker and update upgrade and install ${ENDCOLOR}"
 if [[ "$systemos" = 'debian' ]]; then
 apt remove ddocker.io docker-doc docker-compose podman-docker containerd runc -y
 apt update
-apt install install gpg ca-certificates curl gnupg -y
+apt install lsb-release gnupg2 apt-transport-https ca-certificates curl software-properties-common -y
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 chmod a+r /etc/apt/keyrings/docker.gpg
@@ -126,7 +126,7 @@ fi
 if [[ "$systemos" = 'ubuntu' ]]; then
 apt remove docker.io docker-doc docker-compose podman-docker containerd runc -y
 apt update
-apt install install gpg ca-certificates curl gnupg -y
+apt install lsb-release gnupg2 apt-transport-https ca-certificates curl software-properties-common -y
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 chmod a+r /etc/apt/keyrings/docker.gpg
