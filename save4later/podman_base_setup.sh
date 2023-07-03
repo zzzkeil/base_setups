@@ -109,24 +109,19 @@ fi
 echo -e "${GREEN}OS add docker and update upgrade and install ${ENDCOLOR}"
 
 if [[ "$systemos" = 'debian' ]]; then
-
+apt install podman libapparmor-dev -y
 fi
 
 if [[ "$systemos" = 'ubuntu' ]]; then
-
+apt install podman libapparmor-dev -y
 fi
-
-
 
 if [[ "$systemos" = 'fedora' ]]; then
-
-
+dnf install podman -y
 fi
-
 ##maybe the same as fedora ??......
 if [[ "$systemos" = 'rocky' ]] || [[ "$systemos" = 'centos' ]] || [[ "$systemos" = 'almalinux' ]]; then
-
-
+dnf install podman -y
 fi
 
 ##################  and firewallrules
