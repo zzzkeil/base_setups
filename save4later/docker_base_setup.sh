@@ -165,4 +165,24 @@ systemctl start containerd.service
 
 fi
 
+################## docker and firewallrules ...... so many ways .....
+inet=$(ip route show default | awk '/default/ {print $5}')
+systemctl stop docker
+echo '
+{
+"iptables": false
+}
+' > /etc/docker/daemon.json
+firewall-cmd --zone=public --add-masquerade --permanent
+firewall-cmd --permanent --zone=trusted --add-interface=docker0
+firewall-cmd --permanent --zone=public --add-interface=$inet
+firewall-cmd --reload
+systemctl restart docker
+echo " 
+You have to allow your firewalld ports for docker manual, like...
+firewall-cmd --permanent --zone=public --add-port=0000/tcp
+"
+
+
+
 ############################################################## more to come :)
