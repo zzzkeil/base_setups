@@ -124,6 +124,8 @@ if [[ "$systemos" = 'rocky' ]] || [[ "$systemos" = 'centos' ]] || [[ "$systemos"
 dnf install podman -y
 fi
 
+echo "alias docker=podman" >> .bashrc 
+
 ##################  and firewallrules
 #inet=$(ip route show default | awk '/default/ {print $5}')
 
