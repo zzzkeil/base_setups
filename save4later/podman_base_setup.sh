@@ -124,6 +124,7 @@ if [[ "$systemos" = 'rocky' ]] || [[ "$systemos" = 'centos' ]] || [[ "$systemos"
 dnf install podman -y
 fi
 
+shopt -s expand_aliases
 alias docker=podman
 
 ##################  and firewallrules
