@@ -109,7 +109,7 @@ fi
 echo -e "${GREEN}OS add docker and update upgrade and install ${ENDCOLOR}"
 
 if [[ "$systemos" = 'debian' ]]; then
-apt remove ddocker.io docker-doc docker-compose podman-docker containerd runc -y
+apt remove docker.io docker-doc docker-compose podman-docker containerd runc -y
 apt update
 apt install lsb-release gnupg2 apt-transport-https ca-certificates curl software-properties-common -y
 sudo install -m 0755 -d /etc/apt/keyrings
