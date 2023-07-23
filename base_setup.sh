@@ -43,6 +43,12 @@ if [[ "$EUID" -ne 0 ]]; then
 fi
 
 #
+# test -- set correct systemtime 
+#
+dpkg-reconfigure tzdata
+
+
+#
 # OS check
 #
 echo -e "${GREEN}OS check ${ENDCOLOR}"
