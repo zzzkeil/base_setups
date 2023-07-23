@@ -138,8 +138,12 @@ clear
 ###worked on debian
 if [[ "$systemos" = 'debian' ]] || [[ "$systemos" = 'ubuntu' ]]; then
 if [ -f /var/run/reboot-required ]; then
-   echo -e " ${YELLOW}'A reboot is required'${ENDCOLOR}"
-   echo " Reboot, and run this script again "
+echo "--------------------------------------------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------------------------------------"
+echo -e " ${RED}Oh dammit :) - System upgrade required a reboot${ENDCOLOR}"
+echo -e " ${YELLOW}reboot, and run this script again ${ENDCOLOR}"
+echo "--------------------------------------------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------------------------------------"
    exit 1
 fi
 fi
@@ -148,8 +152,12 @@ fi
 ###testing
 if [[ "$systemos" = 'fedora' ]] || [[ "$systemos" = 'rocky' ]] || [[ "$systemos" = 'centos' ]] || [[ "$systemos" = 'almalinux' ]]; then
 if [ needs-restarting -r | grep -q '1']; then
-   echo -e " ${YELLOW}'A reboot is required'${ENDCOLOR}"
-   echo " Reboot, and run this script again "
+echo "--------------------------------------------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------------------------------------"
+echo -e " ${RED}Oh dammit :) - System upgrade required a reboot${ENDCOLOR}"
+echo -e " ${YELLOW}reboot, and run this script again ${ENDCOLOR}"
+echo "--------------------------------------------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------------------------------------"
    exit 1
 fi
 fi
