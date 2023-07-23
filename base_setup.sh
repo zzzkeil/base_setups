@@ -235,6 +235,7 @@ clear
 echo -e "${GREEN}Set firewalld config  ${ENDCOLOR}"
 
 systemctl start firewalld
+firewall-cmd --zone=public --remove-service=ssh
 firewall-cmd --zone=public --add-port=$sshport/tcp
 firewall-cmd --runtime-to-permanent
 clear
