@@ -112,12 +112,28 @@ echo -e "${GREEN}update upgrade and install ${ENDCOLOR}"
 
 if [[ "$systemos" = 'debian' ]]; then
 apt update && apt upgrade -y && apt autoremove -y
+if [ -f /var/run/reboot-required ]; then
+echo "--------------------------------------------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------------------------------------"
+echo -e " ${RED}Oh dammit :) - System upgrade required a reboot${ENDCOLOR}"
+echo -e " ${YELLOW}reboot, and run this script again ${ENDCOLOR}"
+echo "--------------------------------------------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------------------------------------"
+   exit 1
 apt remove ufw -y
 apt install firewalld fail2ban rsyslog unattended-upgrades apt-listchanges -y
 fi
 
 if [[ "$systemos" = 'ubuntu' ]]; then
 apt update && apt upgrade -y && apt autoremove -y
+if [ -f /var/run/reboot-required ]; then
+echo "--------------------------------------------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------------------------------------"
+echo -e " ${RED}Oh dammit :) - System upgrade required a reboot${ENDCOLOR}"
+echo -e " ${YELLOW}reboot, and run this script again ${ENDCOLOR}"
+echo "--------------------------------------------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------------------------------------"
+   exit 1
 apt remove ufw needrestart -y
 apt install firewalld fail2ban rsyslog unattended-upgrades apt-listchanges -y
 fi
@@ -135,19 +151,6 @@ fi
 
 
 clear 
-
-###worked on debian
-if [[ "$systemos" = 'debian' ]] || [[ "$systemos" = 'ubuntu' ]]; then
-if [ -f /var/run/reboot-required ]; then
-echo "--------------------------------------------------------------------------------------------------------"
-echo "--------------------------------------------------------------------------------------------------------"
-echo -e " ${RED}Oh dammit :) - System upgrade required a reboot${ENDCOLOR}"
-echo -e " ${YELLOW}reboot, and run this script again ${ENDCOLOR}"
-echo "--------------------------------------------------------------------------------------------------------"
-echo "--------------------------------------------------------------------------------------------------------"
-   exit 1
-fi
-fi
 
 
 ###testing
