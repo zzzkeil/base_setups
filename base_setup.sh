@@ -267,10 +267,17 @@ clear
 #
 # firewalld
 #
+
 echo -e "${GREEN}Set firewalld config  ${ENDCOLOR}"
 
 systemctl start firewalld
 sleep 1
+firewalldstatus="$(systemctl is-active firewalld)"
+if [ "${firewalldstatus}" = "active" ]; then
+echo "ok firewalld is running"
+else 
+systemctl restart firewalld  
+fi
 firewall-cmd --zone=public --remove-service=ssh
 firewall-cmd --zone=public --add-port=$sshport/tcp
 firewall-cmd --runtime-to-permanent
