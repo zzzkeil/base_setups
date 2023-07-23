@@ -120,6 +120,7 @@ echo -e " ${YELLOW}reboot, and run this script again ${ENDCOLOR}"
 echo "--------------------------------------------------------------------------------------------------------"
 echo "--------------------------------------------------------------------------------------------------------"
    exit 1
+fi
 apt remove ufw -y
 apt install firewalld fail2ban rsyslog unattended-upgrades apt-listchanges -y
 fi
@@ -134,6 +135,7 @@ echo -e " ${YELLOW}reboot, and run this script again ${ENDCOLOR}"
 echo "--------------------------------------------------------------------------------------------------------"
 echo "--------------------------------------------------------------------------------------------------------"
    exit 1
+fi
 apt remove ufw needrestart -y
 apt install firewalld fail2ban rsyslog unattended-upgrades apt-listchanges -y
 fi
