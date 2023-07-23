@@ -132,6 +132,29 @@ dnf install epel-release -y
 dnf install tar nano firewalld rsyslog fail2ban dnf-automatic -y
 fi
 
+
+clear 
+
+###testing
+if [[ "$systemos" = 'debian' ]] || [[ "$systemos" = 'ubuntu' ]]; then
+if [ -f /var/run/reboot-required ]; then
+   echo -e " ${YELLOW}'A reboot is required'${ENDCOLOR}"
+   echo " Reboot, and run this script again "
+   exit 1
+fi
+fi
+
+
+###testing
+if [[ "$systemos" = 'fedora' ]] || [[ "$systemos" = 'rocky' ]] || [[ "$systemos" = 'centos' ]] || [[ "$systemos" = 'almalinux' ]]; then
+if [ needs-restarting -r | grep -q '1']; then
+   echo -e " ${YELLOW}'A reboot is required'${ENDCOLOR}"
+   echo " Reboot, and run this script again "
+   exit 1
+fi
+fi
+
+
 mkdir /root/script_backupfiles/
 clear
 
