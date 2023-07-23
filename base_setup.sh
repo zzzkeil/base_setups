@@ -135,7 +135,7 @@ fi
 
 clear 
 
-###testing
+###worked on debian
 if [[ "$systemos" = 'debian' ]] || [[ "$systemos" = 'ubuntu' ]]; then
 if [ -f /var/run/reboot-required ]; then
    echo -e " ${YELLOW}'A reboot is required'${ENDCOLOR}"
@@ -262,15 +262,11 @@ echo -e "${GREEN}Set firewalld config  ${ENDCOLOR}"
 
 systemctl start firewalld
 #sometimes ??? ERROR:dbus.proxies:Introspect error on :1.17:/org/fedoraproject/FirewallD1: dbus.exceptions.DBusException: org.freedesktop.DBus.Error.NoReply: Message recipient disconnected from message bus without replying
-sleep 3
-systemctl stop firewalld
-sleep 3
-systemctl start firewalld
-sleep 3
+sleep 1
 firewall-cmd --zone=public --remove-service=ssh
 firewall-cmd --zone=public --add-port=$sshport/tcp
 firewall-cmd --runtime-to-permanent
-sleep 6
+sleep 1
 clear
 
 
