@@ -243,7 +243,7 @@ sleep 3
 firewall-cmd --zone=public --remove-service=ssh
 firewall-cmd --zone=public --add-port=$sshport/tcp
 firewall-cmd --runtime-to-permanent
-
+sleep 3
 clear
 
 
