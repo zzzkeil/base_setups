@@ -42,11 +42,6 @@ if [[ "$EUID" -ne 0 ]]; then
 	exit 1
 fi
 
-#
-# test -- set correct systemtime 
-#
-dpkg-reconfigure tzdata
-
 
 #
 # OS check
@@ -275,12 +270,10 @@ clear
 echo -e "${GREEN}Set firewalld config  ${ENDCOLOR}"
 
 systemctl start firewalld
-#sometimes ??? ERROR:dbus.proxies:Introspect error on :1.17:/org/fedoraproject/FirewallD1: dbus.exceptions.DBusException: org.freedesktop.DBus.Error.NoReply: Message recipient disconnected from message bus without replying
 sleep 1
 firewall-cmd --zone=public --remove-service=ssh
 firewall-cmd --zone=public --add-port=$sshport/tcp
 firewall-cmd --runtime-to-permanent
-sleep 1
 clear
 
 
@@ -402,6 +395,7 @@ echo "$totalban1 ip adresses with fail2ban from jail sshd"
 echo ""
 ' >> /etc/update-motd.d/99-base01
 chmod +x /etc/update-motd.d/99-base01
+dpkg-reconfigure tzdata
 fi
 
 if [[ "$systemos" = 'fedora' ]] || [[ "$systemos" = 'rocky' ]] || [[ "$systemos" = 'centos' ]] || [[ "$systemos" = 'almalinux' ]]; then
