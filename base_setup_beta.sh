@@ -25,7 +25,7 @@ echo ""
 echo ""
 echo  -e "                    ${RED}To EXIT this script press any key${ENDCOLOR}"
 echo ""
-echo  -e "                            ${GREEN}Press [Y] to begin${ENDCOLOR}"
+echo  -e "                            ${GREEN}Do not run this script now, unfinished....... Press [Y] to destroy your system${ENDCOLOR}"
 read -p "" -n 1 -r
 echo ""
 echo ""
@@ -174,7 +174,7 @@ clear
 
 
 #
-# Password
+# Password  or  Publickey
 #
 echo -e " ${GREEN}Set a secure root password ${ENDCOLOR}"
 
@@ -223,9 +223,45 @@ fi
 
 clear
 
+### Publickey 
+### gen ssh-key for client
+mkdir /root/ssh-key-client
+randompasswd2=$(</dev/urandom tr -dc 'A-Za-z0-9' | head -c 10  ; echo)
+read -p "Set a password for your client ssh-key (empty is no password) " -e -i  $randompasswd2 sshkeypass
+ssh-keygen -f /root/ssh-key-client/clientkeyed25519 -t ed25519 -N $sshkeypass
+cat /root/ssh-key-client/clientkeyed25519.pub | cat >> /root/.ssh/authorized_keys
+sshprivkey="$(cat /root/ssh-key-client/clientkeyed25519)"
+
+echo " Your new root ssh-key is : "
+echo ""
+echo -e "${GREEN}$sshprivkey${ENDCOLOR}  <<< copy your OPENSSH PRIVATE KEY "
+echo ""
+echo -e "${GREEN}$randompasswd2${ENDCOLOR}  <<< copy your OPENSSH PRIVATE KEY Password "
+echo ""
+echo -e "${YELLOW} !!! Save this localy on your device / password-manager now !!! ${ENDCOLOR}"
+echo " Use your mouse to mark the green stuff (copy), and paste it on your secure location (other computer/passwordmanager/...) !"
+echo ""
+echo " if you not save this , you can never loggin again, be carefull"
+echo ""
+echo ""
+read -p "Press enter to continue"
+echo ""
+echo " just one more time. "
+echo " if you not save this, you can never loggin again, be carefull"
+echo ""
+echo ""
+read -p "Press enter to continue"
+
+
+
+
+
+
+
 #
 # SSH
 #
+
 echo -e "${GREEN}Set ssh config  ${ENDCOLOR}"
 
 read -p "Choose your SSH Port: (default 22) " -e -i 2222 sshport
