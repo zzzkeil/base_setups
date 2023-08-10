@@ -48,7 +48,7 @@ fi
 #root Authentication check if Password or Pubkey used in this session #
 #
 rootsessioncheck="$(grep root /etc/shadow | cut -c 1-6)"
-if [[ "$rootsessioncheck" = 'root:x' ]]; then
+if [[ "$rootsessioncheck" = 'root:!' ]]; then
    echo " root password not set - Pubkey login is used in this session "
  else
    echo " root password is set - Password login is used in this session "
