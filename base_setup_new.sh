@@ -42,20 +42,6 @@ if [[ "$EUID" -ne 0 ]]; then
 	exit 1
 fi
 
-
-##Testing
-#
-#root Authentication check if Password or Pubkey used in this session #
-#
-rootsessioncheck="$(grep root /etc/shadow | cut -c 1-6)"
-if [[ "$rootsessioncheck" = 'root:!' ]]; then
-   echo " root password not set - Pubkey login is used in this session "
- else
-   echo " root password is set - Password login is used in this session "
-fi
-
-
-
 #
 # OS check
 #
@@ -186,9 +172,60 @@ mkdir /root/script_backupfiles/
 clear
 
 
+
+##Testing
 #
-# Password
+#root Authentication check if Password or Pubkey used in this session and make changes#
 #
+rootsessioncheck="$(grep root /etc/shadow | cut -c 1-6)"
+if [[ "$rootsessioncheck" = 'root:!' ]]; then
+   echo " No root password set, probably you using PubkeyAuthentication in this session !? "
+   echo -e " So SSH PubkeyAuthentication yes / PermitRootLogin prohibit-password/ PasswordAuthentication no, get set in sshd_config"
+   echo "" 
+   echo -e "${GREEN}Press enter to continue${ENDCOLOR} or ${RED} CTRL + C to abort${ENDCOLOR}"
+   echo ""
+ 
+   read -p ""
+   
+echo -e "${GREEN}Set ssh config  ${ENDCOLOR}"
+
+read -p "Choose your SSH Port: (default 22) " -e -i 2222 sshport
+ssh-keygen -f /etc/ssh/key1ecdsa -t ecdsa -b 521 -N ""
+ssh-keygen -f /etc/ssh/key2ed25519 -t ed25519 -N ""
+
+mv /etc/ssh/sshd_config /root/script_backupfiles/sshd_config.orig
+echo "Port $sshport
+HostKey /etc/ssh/key1ecdsa
+HostKey /etc/ssh/key2ed25519
+HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com,ssh-ed25519  
+KexAlgorithms curve25519-sha256                                 
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com    
+MACs hmac-sha2-512-etm@openssh.com
+HostbasedAcceptedKeyTypes ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,ssh-ed25519
+
+PermitRootLogin prohibit-password
+PasswordAuthentication no
+PubkeyAuthentication yes
+#AuthorizedKeysFile     .ssh/authorized_keys
+
+ChallengeResponseAuthentication no
+UsePAM yes
+X11Forwarding no
+PermitEmptyPasswords no
+PrintMotd no
+AcceptEnv LANG LC_*
+Subsystem sftp  internal-sftp 
+UseDNS no
+Compression no
+ClientAliveCountMax 3
+ClientAliveInterval 600
+IgnoreRhosts yes">> /etc/ssh/sshd_config
+
+fi   
+ else
+   echo " root password is set - Password login is used in this session "
+
+
 echo -e " ${GREEN}Set a secure root password ${ENDCOLOR}"
 
 echo ""
@@ -206,7 +243,7 @@ if [[ ! $REPLY =~ ^[Cc]$ ]]
 then
 newpass=0
 echo " Ok no password change"
-echo " Get sure you use a secure password or PubkeyAuthentication !"
+echo " Get sure you use a secure password or use PubkeyAuthentication !"
 echo ""
 echo ""
 read -p "Press enter to continue"
@@ -237,9 +274,6 @@ fi
 
 clear
 
-#
-# SSH
-#
 echo -e "${GREEN}Set ssh config  ${ENDCOLOR}"
 
 read -p "Choose your SSH Port: (default 22) " -e -i 2222 sshport
@@ -255,7 +289,6 @@ KexAlgorithms curve25519-sha256
 Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com    
 MACs hmac-sha2-512-etm@openssh.com
 HostbasedAcceptedKeyTypes ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,ssh-ed25519
-
 
 PermitRootLogin yes
 PasswordAuthentication yes
@@ -273,6 +306,8 @@ Compression no
 #ClientAliveCountMax 2
 ClientAliveInterval 600
 IgnoreRhosts yes">> /etc/ssh/sshd_config
+   
+fi
 
 clear
 
@@ -476,7 +511,7 @@ echo ""
 echo "Your settings:"
 if [[ "$newpass" = '0' ]]; then
 echo ""
-echo "Your password has not changed "
+echo "Your root password or PubkeyAuthentication has not changed "
 fi
 echo ""
 echo "New ssh port = $sshport / and open in firewalld"
