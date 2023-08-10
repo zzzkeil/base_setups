@@ -220,8 +220,7 @@ Compression no
 ClientAliveCountMax 3
 ClientAliveInterval 600
 IgnoreRhosts yes">> /etc/ssh/sshd_config
-
-fi   
+   
  else
    echo " root password is set - Password login is used in this session "
 
