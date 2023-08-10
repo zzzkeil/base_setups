@@ -179,8 +179,13 @@ clear
 #
 rootsessioncheck="$(grep root /etc/shadow | cut -c 1-6)"
 if [[ "$rootsessioncheck" = 'root:!' ]]; then
+   echo ""
    echo " No root password set, probably you using PubkeyAuthentication in this session !? "
-   echo -e " So SSH PubkeyAuthentication yes / PermitRootLogin prohibit-password/ PasswordAuthentication no, get set in sshd_config"
+   echo " This get set in sshd_config : "
+   echo " AuthenticationMethods publickey"
+   echo " PubkeyAuthentication yes"
+   echo " PermitRootLogin prohibit-password"
+   echo " PasswordAuthentication no"
    echo "" 
    echo -e "${GREEN}Press enter to continue${ENDCOLOR} or ${RED} CTRL + C to abort${ENDCOLOR}"
    echo ""
@@ -189,7 +194,7 @@ if [[ "$rootsessioncheck" = 'root:!' ]]; then
    
 echo -e "${GREEN}Set ssh config  ${ENDCOLOR}"
 
-read -p "Choose your SSH Port: (default 22) " -e -i 2222 sshport
+read -p "Choose your SSH Port: (default 22) " -e -i 2299 sshport
 ssh-keygen -f /etc/ssh/key1ecdsa -t ecdsa -b 521 -N ""
 ssh-keygen -f /etc/ssh/key2ed25519 -t ed25519 -N ""
 
@@ -205,6 +210,7 @@ HostbasedAcceptedKeyTypes ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nis
 
 PermitRootLogin prohibit-password
 PasswordAuthentication no
+AuthenticationMethods publickey
 PubkeyAuthentication yes
 #AuthorizedKeysFile     .ssh/authorized_keys
 
@@ -217,6 +223,7 @@ AcceptEnv LANG LC_*
 Subsystem sftp  internal-sftp 
 UseDNS no
 Compression no
+LoginGraceTime 45
 ClientAliveCountMax 3
 ClientAliveInterval 600
 IgnoreRhosts yes">> /etc/ssh/sshd_config
@@ -275,7 +282,7 @@ clear
 
 echo -e "${GREEN}Set ssh config  ${ENDCOLOR}"
 
-read -p "Choose your SSH Port: (default 22) " -e -i 2222 sshport
+read -p "Choose your SSH Port: (default 22) " -e -i 2299 sshport
 ssh-keygen -f /etc/ssh/key1ecdsa -t ecdsa -b 521 -N ""
 ssh-keygen -f /etc/ssh/key2ed25519 -t ed25519 -N ""
 
@@ -302,7 +309,8 @@ AcceptEnv LANG LC_*
 Subsystem sftp  internal-sftp 
 UseDNS no
 Compression no
-#ClientAliveCountMax 2
+LoginGraceTime 45
+ClientAliveCountMax 3
 ClientAliveInterval 600
 IgnoreRhosts yes">> /etc/ssh/sshd_config
    
