@@ -214,6 +214,7 @@ AuthenticationMethods publickey
 PubkeyAuthentication yes
 #AuthorizedKeysFile     .ssh/authorized_keys
 
+MaxAuthTries 2
 ChallengeResponseAuthentication no
 UsePAM yes
 X11Forwarding no
@@ -300,6 +301,7 @@ PermitRootLogin yes
 PasswordAuthentication yes
 #PubkeyAuthentication yes
 
+MaxAuthTries 2
 ChallengeResponseAuthentication no
 UsePAM yes
 X11Forwarding no
