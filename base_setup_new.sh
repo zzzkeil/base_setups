@@ -218,6 +218,8 @@ MaxAuthTries 2
 ChallengeResponseAuthentication no
 UsePAM yes
 X11Forwarding no
+AllowTcpForwarding no
+AllowAgentForwarding no
 PermitEmptyPasswords no
 PrintMotd no
 AcceptEnv LANG LC_*
@@ -225,8 +227,8 @@ Subsystem sftp  internal-sftp
 UseDNS no
 Compression no
 LoginGraceTime 45
-ClientAliveCountMax 3
-ClientAliveInterval 600
+ClientAliveCountMax 1
+ClientAliveInterval 1800
 IgnoreRhosts yes">> /etc/ssh/sshd_config
    
  else
@@ -305,6 +307,8 @@ MaxAuthTries 2
 ChallengeResponseAuthentication no
 UsePAM yes
 X11Forwarding no
+AllowTcpForwarding no
+AllowAgentForwarding no
 PermitEmptyPasswords no
 PrintMotd no
 AcceptEnv LANG LC_*
@@ -312,8 +316,8 @@ Subsystem sftp  internal-sftp
 UseDNS no
 Compression no
 LoginGraceTime 45
-ClientAliveCountMax 3
-ClientAliveInterval 600
+ClientAliveCountMax 1
+ClientAliveInterval 1800
 IgnoreRhosts yes">> /etc/ssh/sshd_config
    
 fi
