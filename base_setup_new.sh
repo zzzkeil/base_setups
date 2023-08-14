@@ -178,7 +178,7 @@ clear
 #root Authentication check if Password or Pubkey used in this session and make changes#
 #
 rootsessioncheck="$(grep root /etc/shadow | cut -c 1-6)"
-if [[ "$rootsessioncheck" = 'root:!' ]]; then
+if [[ "$rootsessioncheck" = 'root:!' ]] || [[ "$rootsessioncheck" = 'root:*' ]]; then
    echo ""
    echo " No root password set, probably you using PubkeyAuthentication in this session !? "
    echo " This get set in sshd_config : "
