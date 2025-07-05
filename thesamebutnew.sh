@@ -15,7 +15,7 @@ clear
 echo -e " ${GRAYB}###${ENDCOLOR}"
 echo -e " ${GRAYB}##${ENDCOLOR}"
 echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN} Test Version 2024.11.xx - ------   ${ENDCOLOR}"
-echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}Base server config for Debian 12 ${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}Base server config for Debian 13 ${ENDCOLOR}"
 echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}This script configure / install ${ENDCOLOR}"
 echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}password/pubkey , ssh, fail2ban, rsyslog, firawalld, unattended-upgrades ${ENDCOLOR}"
 echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}Infos @ https://github.com/zzzkeil/base_setups  ${ENDCOLOR}"
@@ -51,7 +51,7 @@ echo -e "${GREEN}OS check ${ENDCOLOR}"
 . /etc/os-release
 
 if [[ "$ID" = 'debian' ]]; then
- if [[ "$VERSION_ID" = '12' ]]; then
+ if [[ "$VERSION_ID" = '13' ]]; then
    echo -e "${GREEN}OS = Debian ${ENDCOLOR}"
    systemos=debian
    fi
@@ -60,7 +60,7 @@ fi
 if [[ "$systemos" = '' ]]; then
    echo ""
    echo ""
-   echo -e "${RED}This script is only for Debian 12!${ENDCOLOR}"
+   echo -e "${RED}This script is only for Debian 13!${ENDCOLOR}"
    exit 1
 fi
 
@@ -81,8 +81,8 @@ echo "--------------------------------------------------------------------------
 echo "--------------------------------------------------------------------------------------------------------"
    exit 1
 fi
-apt remove ufw -y
-apt install firewalld fail2ban rsyslog unattended-upgrades apt-listchanges -y
+apt-get remove ufw -y
+apt-get install firewalld fail2ban rsyslog unattended-upgrades apt-listchanges -y
 fi
 
 mkdir /root/script_backupfiles/
