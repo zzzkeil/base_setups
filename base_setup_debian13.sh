@@ -14,7 +14,7 @@ ENDCOLOR="\e[0m"
 clear
 echo -e " ${GRAYB}###${ENDCOLOR}"
 echo -e " ${GRAYB}##${ENDCOLOR}"
-echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN} Test Version 2024.11.xx - ------   ${ENDCOLOR}"
+echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN} Test Version 2025.07.05 - ------   ${ENDCOLOR}"
 echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}Base server config for Debian 13 ${ENDCOLOR}"
 echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}This script configure / install ${ENDCOLOR}"
 echo -e " ${GRAYB}#${ENDCOLOR} ${GREEN}password/pubkey , ssh, fail2ban, rsyslog, firawalld, unattended-upgrades ${ENDCOLOR}"
@@ -71,7 +71,7 @@ fi
 echo -e "${GREEN}update upgrade and install ${ENDCOLOR}"
 
 if [[ "$systemos" = 'debian' ]]; then
-apt update && apt upgrade -y && apt autoremove -y
+apt-get update && apt-get upgrade -y && apt-get autoremove -y
 if [ -f /var/run/reboot-required ]; then
 echo "--------------------------------------------------------------------------------------------------------"
 echo "--------------------------------------------------------------------------------------------------------"
