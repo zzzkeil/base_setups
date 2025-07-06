@@ -95,6 +95,13 @@ apt-get install firewalld fail2ban rsyslog unattended-upgrades apt-listchanges -
 fi
 
 if [[ "$systemos" = 'ubuntu' ]]; then
+systemctl stop snapd
+systemctl disable snapd
+systemctl disable snapd.socket
+systemctl disable snapd.seeded.service
+apt-get remove --purge --assume-yes snapd
+rm -rf /var/cache/snapd/
+rm -rf ~/snap/
 apt-get update && apt-get upgrade -y && apt-get autoremove -y
 if [ -f /var/run/reboot-required ]; then
 echo "--------------------------------------------------------------------------------------------------------"
