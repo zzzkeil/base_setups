@@ -378,7 +378,7 @@ clear
 #
 echo -e "${GREEN}Clear/Change some stuff ${ENDCOLOR}"
 
-if [[ "$systemos" = 'debian' ]] || [[ "$systemos" = 'ubuntu' ]]; thenif [[ "$systemos" = 'debian' ]]; then
+if [[ "$systemos" = 'debian' ]] || [[ "$systemos" = 'ubuntu' ]]; then
 echo '#!/bin/sh
 runtime1=$(uptime -s)
 runtime2=$(uptime -p)
