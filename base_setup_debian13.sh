@@ -80,7 +80,7 @@ fi
 echo -e "${GREEN}update upgrade and install ${ENDCOLOR}"
 
 if [[ "$systemos" = 'debian' ]]; then
-apt update && apt upgrade -y && apt autoremove -y
+apt-get update && apt-get upgrade -y && apt-get autoremove -y
 if [ -f /var/run/reboot-required ]; then
 echo "--------------------------------------------------------------------------------------------------------"
 echo "--------------------------------------------------------------------------------------------------------"
@@ -90,12 +90,12 @@ echo "--------------------------------------------------------------------------
 echo "--------------------------------------------------------------------------------------------------------"
    exit 1
 fi
-apt remove ufw -y
-apt install firewalld fail2ban rsyslog unattended-upgrades apt-listchanges -y
+apt-get remove ufw -y
+apt-get install firewalld fail2ban rsyslog unattended-upgrades apt-listchanges -y
 fi
 
 if [[ "$systemos" = 'ubuntu' ]]; then
-apt update && apt upgrade -y && apt autoremove -y
+apt-get update && apt-get upgrade -y && apt-get autoremove -y
 if [ -f /var/run/reboot-required ]; then
 echo "--------------------------------------------------------------------------------------------------------"
 echo "--------------------------------------------------------------------------------------------------------"
@@ -105,8 +105,8 @@ echo "--------------------------------------------------------------------------
 echo "--------------------------------------------------------------------------------------------------------"
    exit 1
 fi
-apt remove ufw needrestart -y
-apt install firewalld fail2ban rsyslog unattended-upgrades apt-listchanges -y
+apt-get remove ufw needrestart -y
+apt-get install firewalld fail2ban rsyslog unattended-upgrades apt-listchanges -y
 fi
 
 mkdir /root/script_backupfiles/
