@@ -57,10 +57,19 @@ if [[ "$ID" = 'debian' ]]; then
    fi
 fi
 
+if [[ "$ID" = 'ubuntu' ]]; then
+ if [[ "$VERSION_ID" = '24.04' ]]; then
+   echo -e "${GREEN}OS = Ubuntu ${ENDCOLOR}"
+   systemos=ubuntu
+   fi
+fi
+
+
 if [[ "$systemos" = '' ]]; then
+   clear
    echo ""
    echo ""
-   echo -e "${RED}This script is only for Debian 13!${ENDCOLOR}"
+   echo -e "${RED}This script is only for Debian 13 and Ubuntu 24.04 !${ENDCOLOR}"
    exit 1
 fi
 
@@ -71,7 +80,7 @@ fi
 echo -e "${GREEN}update upgrade and install ${ENDCOLOR}"
 
 if [[ "$systemos" = 'debian' ]]; then
-apt-get update && apt-get upgrade -y && apt-get autoremove -y
+apt update && apt upgrade -y && apt autoremove -y
 if [ -f /var/run/reboot-required ]; then
 echo "--------------------------------------------------------------------------------------------------------"
 echo "--------------------------------------------------------------------------------------------------------"
@@ -81,8 +90,23 @@ echo "--------------------------------------------------------------------------
 echo "--------------------------------------------------------------------------------------------------------"
    exit 1
 fi
-apt-get remove ufw -y
-apt-get install firewalld fail2ban rsyslog unattended-upgrades apt-listchanges -y
+apt remove ufw -y
+apt install firewalld fail2ban rsyslog unattended-upgrades apt-listchanges -y
+fi
+
+if [[ "$systemos" = 'ubuntu' ]]; then
+apt update && apt upgrade -y && apt autoremove -y
+if [ -f /var/run/reboot-required ]; then
+echo "--------------------------------------------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------------------------------------"
+echo -e " ${RED}Oh dammit :) - System upgrade required a reboot${ENDCOLOR}"
+echo -e " ${YELLOW}reboot, and run this script again ${ENDCOLOR}"
+echo "--------------------------------------------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------------------------------------"
+   exit 1
+fi
+apt remove ufw needrestart -y
+apt install firewalld fail2ban rsyslog unattended-upgrades apt-listchanges -y
 fi
 
 mkdir /root/script_backupfiles/
@@ -306,7 +330,7 @@ clear
 #
 echo -e "${GREEN}unattended-upgrades  ${ENDCOLOR}"
 
-if [[ "$systemos" = 'debian' ]]; then
+if [[ "$systemos" = 'debian' ]] || [[ "$systemos" = 'ubuntu' ]]; then
 mv /etc/apt/apt.conf.d/50unattended-upgrades /root/script_backupfiles/50unattended-upgrades.orig
 echo 'Unattended-Upgrade::Allowed-Origins {
         "${distro_id}:${distro_codename}";
@@ -347,7 +371,7 @@ clear
 #
 echo -e "${GREEN}Clear/Change some stuff ${ENDCOLOR}"
 
-if [[ "$systemos" = 'debian' ]]; then
+if [[ "$systemos" = 'debian' ]] || [[ "$systemos" = 'ubuntu' ]]; thenif [[ "$systemos" = 'debian' ]]; then
 echo '#!/bin/sh
 runtime1=$(uptime -s)
 runtime2=$(uptime -p)
