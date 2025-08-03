@@ -25,3 +25,13 @@ chmod +x base_setup.sh
 
 
 
+
+Test
+
+```
+wget -O  base_setup_debian13.sh https://raw.githubusercontent.com/zzzkeil/base_setups/refs/heads/master/base_setup_debian13.sh
+chmod +x base_setup_debian13.sh
+./base_setup_debian13.sh
+
+
+```
