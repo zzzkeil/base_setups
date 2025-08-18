@@ -137,8 +137,41 @@ install_multiple_packages_with_gauge1
 
 
 mkdir /root/script_backupfiles/
+mv /etc/ssh/sshd_config /root/script_backupfiles/sshd_config.orig
 clear
 
+is_valid_port() {
+    local ssh0port="$1"
+    if [[ "$ssh0port" =~ ^[0-9]+$ ]] && [ "$ssh0port" -ge 0 ] && [ "$ssh0port" -le 65535 ] && [ "$ssh0port" -ne 5335 ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+while true; do
+    sshport=$(whiptail --title "Wireguard Port Settings" --inputbox "Choose a free port 1-65535\n- Do not use port 5335\n- Do not use a used port!\n- To list all currently activ ports, cancel now and you see a list\nThen start this script again" 15 80 "2222" 3>&1 1>&2 2>&3)
+    if [ $? -eq 0 ]; then
+        if is_valid_port "$sshport"; then
+            break
+        else
+            whiptail --title "Invalid Port" --msgbox "Invalid port number. Please enter a port number between 1 and 65535. Do not use port 5335" 15 80
+        fi
+    else
+	whiptail --title "Aborted" --msgbox "Ok, cancel. No changes to system was made.\n" 15 80
+    clear
+	echo "Here is your list of currently open ports:"
+	ss -tuln | awk '{print $5}' | cut -d':' -f2 | sort -n | uniq
+    echo ""
+    echo "Now run the script again, and aviod useing a port from above"
+	echo ""
+    echo ""
+    exit 1
+    fi
+done
+
+ssh-keygen -f /etc/ssh/key1ecdsa -t ecdsa -b 521 -N ""
+ssh-keygen -f /etc/ssh/key2ed25519 -t ed25519 -N ""
 
 #
 #root Authentication check if Password or Pubkey used in this session and make changes#
@@ -146,32 +179,22 @@ clear
 rootsessioncheck="$(grep root /etc/shadow | cut -c 1-6)"
 if [[ "$rootsessioncheck" = 'root:!' ]] || [[ "$rootsessioncheck" = 'root:*' ]]; then
 msgroot1="No root password set, probably you using PubkeyAuthentication in this session !?\n
-This sript now set this settings in your sshd_config :\n\n
+Add some settings to your sshd_config :\n\n
+Port $sshport\n
 AuthenticationMethods publickey\n
 PubkeyAuthentication yes\n
 PermitRootLogin prohibit-password\n
-PasswordAuthentication no\n\n
+PasswordAuthentication no\n
+and more....\n
 Is this right ?"
-if whiptail --title "PubkeyAuthentication" --yesno "$msgroot1" 15 80; then
-echo ""
-else
-whiptail --title "Aborted" --msgbox "Ok, no install right now. cu have a nice day." 15 80
-exit 1
-fi   
+ if whiptail --title "Pubkey Authentication" --yesno "$msgroot1" 15 80; then
+ echo ""
+ else
+ whiptail --title "Aborted" --msgbox "Ok, no install right now. cu have a nice day." 15 80
+ exit 1
+ fi   
 
-#####################################################################################################
-#####################################################################################################
-#####################################################################################################
-#####################################################################################################
-#####################################################################################################
-   
-echo -e "${GREEN}Set ssh config  ${ENDCOLOR}"
 
-read -p "Choose your SSH Port: (default 22) " -e -i 2299 sshport
-ssh-keygen -f /etc/ssh/key1ecdsa -t ecdsa -b 521 -N ""
-ssh-keygen -f /etc/ssh/key2ed25519 -t ed25519 -N ""
-
-mv /etc/ssh/sshd_config /root/script_backupfiles/sshd_config.orig
 echo "Port $sshport
 HostKey /etc/ssh/key1ecdsa
 HostKey /etc/ssh/key2ed25519
@@ -204,66 +227,24 @@ ClientAliveCountMax 1
 ClientAliveInterval 1800
 IgnoreRhosts yes">> /etc/ssh/sshd_config
    
- else
-
-echo " root password is set - Password login is used in this session "
-
-
-echo -e " ${GREEN}Set a secure root password ${ENDCOLOR}"
-
-echo ""
-echo " This script can create a random secure root password."
-echo " If you want to use PubkeyAuthentication, setup this later by yourself"
-echo ""
-echo ""
-echo  -e " ${GRAY}Press any key  -  to ${RED}NOT${ENDCOLOR} change root password ${ENDCOLOR}"
-echo ""
-echo  -e " ${GRAY}Press [C]  -  to create a secure random root password ${ENDCOLOR}"
-read -p "" -n 1 -r
-echo ""
-echo ""
-if [[ ! $REPLY =~ ^[Cc]$ ]]
-then
-newpass=0
-echo " Ok no password change"
-echo " Get sure you use a secure password or use PubkeyAuthentication !"
-echo ""
-echo ""
-read -p "Press enter to continue"
 else
+
+msgroot2="Secure root password\n
+Create a new secure random root password,\n
+or DO NOT change root password.\n\n
+If you want to use PubkeyAuthentication, setup this later by yourself\n
+"
+if whiptail --title "Set a secure root password" --yesno "msgroot2" 15 80; then
 newpass=1
 randompasswd=$(</dev/urandom tr -dc 'A-Za-z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_`{|}~' | head -c 72  ; echo)
 echo "root:$randompasswd" | chpasswd
-echo ""
-echo ""
-echo " Your new root password is : "
-echo ""
-echo -e "${GREEN}$randompasswd${ENDCOLOR}  <<< copy your new green password "
-echo ""
-echo -e "${YELLOW} !!! Save this password now !!! ${ENDCOLOR}"
-echo " Use your mouse to mark the green password (copy), and paste it on your secure location (other computer/passwordmanager/...) !"
-echo ""
-echo " if you not save this password, you can never loggin again, be carefull"
-echo ""
-echo ""
-read -p "Press enter to continue"
-echo ""
-echo " just one more time. "
-echo " if you not save this password, you can never loggin again, be carefull"
-echo ""
-echo ""
-read -p "Press enter to continue"
+whiptail --title "root password change" --msgbox "Your new root password is :\n\n$randompasswd\n\nCopy and save your new root password now!!! (other computer/passwordmanager/...)\n" 15 99
+whiptail --title "Just one more time" --msgbox "Saved your new password ???\n$randompasswd\n\nIf you not saved this password, you can never loggin again, be carefull\n" 15 99
+else
+whiptail --title "no password change" --msgbox "Ok, no password change\nLets hope it is secure :)" 15 80
+newpass=0
 fi
 
-clear
-
-echo -e "${GREEN}Set ssh config  ${ENDCOLOR}"
-
-read -p "Choose your SSH Port: (default 22) " -e -i 2299 sshport
-ssh-keygen -f /etc/ssh/key1ecdsa -t ecdsa -b 521 -N ""
-ssh-keygen -f /etc/ssh/key2ed25519 -t ed25519 -N ""
-
-mv /etc/ssh/sshd_config /root/script_backupfiles/sshd_config.orig
 echo "Port $sshport
 HostKey /etc/ssh/key1ecdsa
 HostKey /etc/ssh/key2ed25519
@@ -296,15 +277,13 @@ IgnoreRhosts yes">> /etc/ssh/sshd_config
    
 fi
 
-clear
-
 #
 # Network
 #
-echo -e "${GREEN}Set network config  ${ENDCOLOR}"
+#echo -e "${GREEN}Set network config  ${ENDCOLOR}"
 
-read -p "Your hostname :" -e -i remotehost hostnamex
-hostnamectl set-hostname $hostnamex
+#read -p "Your hostname :" -e -i remotehost hostnamex
+#hostnamectl set-hostname $hostnamex
 
 #if [ -f "/etc/network/interfaces.d/50-cloud-init.cfg" ]; then
 #   nano /etc/network/interfaces.d/50-cloud-init.cfg
@@ -314,19 +293,16 @@ hostnamectl set-hostname $hostnamex
 #   nano /etc/NetworkManager/system-connections/cloud-init-eth0.nmconnection
 #fi
 
-clear
 
 #
 # firewalld
 #
-
-echo -e "${GREEN}Set firewalld config  ${ENDCOLOR}"
-
+whiptail --title "firewalld" --msgbox "Next step, set firewalld config " 15 80
 systemctl start firewalld
 sleep 1
 firewalldstatus="$(systemctl is-active firewalld)"
 if [ "${firewalldstatus}" = "active" ]; then
-echo "ok firewalld is running"
+echo ""
 else 
 systemctl restart firewalld  
 fi
@@ -335,12 +311,10 @@ firewall-cmd --zone=public --add-port=$sshport/tcp
 firewall-cmd --runtime-to-permanent
 clear
 
-
 #
 # fail2ban
 #
-echo -e "${GREEN}Set fail2ban for ssh ${ENDCOLOR}"
-
+whiptail --title "fail2ban" --msgbox "Next step, set fail2ban config " 15 80
 echo "
 [sshd]
 enabled = true
@@ -354,13 +328,10 @@ findtime = 1d
 bantime = 18w
 " >> /etc/fail2ban/jail.d/ssh.conf
 
-
-clear
-
 #
 # Updates
 #
-echo -e "${GREEN}unattended-upgrades  ${ENDCOLOR}"
+whiptail --title "upgrades" --msgbox "Next step, set unattended-upgrades config " 15 80
 
 if [[ "$systemos" = 'debian' ]] || [[ "$systemos" = 'ubuntu' ]]; then
 mv /etc/apt/apt.conf.d/50unattended-upgrades /root/script_backupfiles/50unattended-upgrades.orig
@@ -401,8 +372,6 @@ clear
 #
 #misc
 #
-echo -e "${GREEN}Clear/Change some stuff ${ENDCOLOR}"
-
 if [[ "$systemos" = 'debian' ]] || [[ "$systemos" = 'ubuntu' ]]; then
 echo '#!/bin/sh
 runtime1=$(uptime -s)
@@ -426,35 +395,21 @@ https://github.com/zzzkeil/base_setups
 #
 # END
 #
-
-clear
-
-
-echo ""
-echo ""
 if [[ "$newpass" -ne 0 ]]; then
-echo -e " ${YELLOW}!!! REMEMBER - you set a new root password :"
-echo  ""
-echo -e "${GREEN}$randompasswd${ENDCOLOR}  <<< copy your new green password "
-echo ""
-echo -e " ${RED}if you not save this password, you can never loggin again, be carefull ${ENDCOLOR}"
-echo ""
-echo ""
+whiptail --title "REMEMBER - you set a new root password" --msgbox "You set a new root password :\n\n$randompasswd\n\nIf you not saved this password, you can never loggin again, be carefull\n\nNew ssh port = $sshport / open in firewalld" 15 99
 fi
-echo ""
-echo "Your settings:"
 if [[ "$newpass" = '0' ]]; then
-echo ""
-echo "Your root password or PubkeyAuthentication has not changed "
+whiptail --title "Info" --msgbox "Your root password or PubkeyAuthentication has not changed\n\nNew ssh port = $sshport / open in firewalld" 15 80
 fi
-echo ""
-echo "New ssh port = $sshport / and open in firewalld"
-echo ""
-echo ""
-echo -e "${GREEN}Press enter to reboot  ${ENDCOLOR}"
-echo ""
-echo ""
-read -p ""
+if whiptail --title "Lets restart" --yesno "reboot now. It's highly recommended\n" 15 80; then
 systemctl enable fail2ban.service
 systemctl enable firewalld
 reboot
+else
+whiptail --title "Aborted" --msgbox "Be carefull, a reboot is recommended" 15 80
+systemctl enable fail2ban.service
+systemctl enable firewalld
+exit 1
+fi   
+
+
