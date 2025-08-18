@@ -412,7 +412,7 @@ fi
 if [[ "$newpass" = '0' ]]; then
 whiptail --title "Info" --msgbox "Your root password or PubkeyAuthentication has not changed\n\nNew ssh port = $sshport / open in firewalld" 15 80
 fi
-if whiptail --title "Lets restart" --yesno "reboot now. It's highly recommended\n" 15 80; then
+if whiptail --title "Lets restart" --yesno "reboot now. It's highly recommended\nNew ssh port = $sshport / open in firewalld" 15 80; then
 systemctl enable fail2ban.service
 systemctl enable firewalld
 reboot
