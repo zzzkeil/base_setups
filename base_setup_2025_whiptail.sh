@@ -159,7 +159,7 @@ is_valid_port() {
 }
 
 while true; do
-    sshport=$(whiptail --title "SSH Port Settings" --inputbox "Choose a free port 1-65535\n- Do not use port 5335\n- Do not use a used port!\n- To list all currently activ ports, cancel now and you see a list\nThen start this script again" 15 80 "22" 3>&1 1>&2 2>&3)
+    sshport=$(whiptail --title "SSH Port Settings" --inputbox "Choose a free port from 1-65535, for your SSH connection\n- Do not use port 5335\n- Do not use a used port!\n- To list all currently activ ports, cancel now and you see a list\nThen start this script again" 15 80 "22" 3>&1 1>&2 2>&3)
     if [ $? -eq 0 ]; then
         if is_valid_port "$sshport"; then
             break
@@ -239,8 +239,8 @@ IgnoreRhosts yes">> /etc/ssh/sshd_config
 else
 
 msgroot2="Secure root password\n
-Create a new secure random root password,\n
-or DO NOT change root password.\n\n
+Yes, to create a new secure random root password,\n
+No,  DO NOT change your current root password.\n\n
 If you want to use PubkeyAuthentication, setup this later by yourself\n
 "
 if whiptail --title "Set a secure root password" --yesno "$msgroot2" 15 80; then
@@ -248,7 +248,7 @@ newpass=1
 randompasswd=$(</dev/urandom tr -dc 'A-Za-z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_`{|}~' | head -c 72  ; echo)
 echo "root:$randompasswd" | chpasswd
 whiptail --title "root password change" --msgbox "Your new root password is :\n\n$randompasswd\n\nCopy and save your new root password now!!! (other computer/passwordmanager/...)\n" 15 99
-whiptail --title "Just one more time" --msgbox "Saved your new password ???\n$randompasswd\n\nIf you not saved this password, you can never loggin again, be carefull\n" 15 99
+whiptail --title "Just one more time" --msgbox "Saved your new password ???\n\n$randompasswd\n\nIf you not saved this password, you can never loggin again, be carefull!!!\n" 15 99
 else
 whiptail --title "no password change" --msgbox "Ok, no password change\nLets hope it is secure :)" 15 80
 newpass=0
@@ -306,7 +306,7 @@ fi
 #
 # firewalld
 #
-whiptail --title "firewalld" --msgbox "Next step, set firewalld config " 15 80
+whiptail --title "INFO: firewalld" --msgbox "Next step, set firewalld config\n" 15 80
 systemctl start firewalld
 sleep 1
 firewalldstatus="$(systemctl is-active firewalld)"
@@ -323,7 +323,7 @@ clear
 #
 # fail2ban
 #
-whiptail --title "fail2ban" --msgbox "Next step, set fail2ban config " 15 80
+whiptail --title "INFO: fail2ban" --msgbox "Next step, set fail2ban config " 15 80
 echo "
 [sshd]
 enabled = true
@@ -340,7 +340,7 @@ bantime = 18w
 #
 # Updates
 #
-whiptail --title "upgrades" --msgbox "Next step, set unattended-upgrades config\nYou will see nano screens now\n- just press ctrl - x  for defaults" 15 80
+whiptail --title "upgrades" --msgbox "INFO: Next step, set unattended-upgrades config\nYou will see nano screens now\n- just press ctrl - x  for defaults" 15 80
 
 mv /etc/apt/apt.conf.d/50unattended-upgrades /root/script_backupfiles/50unattended-upgrades.orig
 echo 'Unattended-Upgrade::Allowed-Origins {
