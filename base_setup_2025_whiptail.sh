@@ -1,9 +1,18 @@
 #!/bin/bash
 
-if whiptail --title "Hi, lets start" --yesno "Bulid date of this testfile: 2025.08\nBase server config for Debian 13 and Ubuntu 24.04\nThis script configure / install\npassword/pubkey , ssh, fail2ban, rsyslog, firawalld, unattended-upgrades\nInfos @ https://github.com/zzzkeil/base_setups\n\nRun script now ?\n" 15 80; then
+msghi="This 'basescript' configure/prepare your server to use my other setupscripts,\n
+like wireguard with pihole and dnscrypt, nextcloud behind wireguard, ...\n
+Base serverconfig for Debian 13 and Ubuntu 24.04 only\n
+This script installs and configure\n
+root password/pubkey, ssh, fail2ban, rsyslog, firawalld, unattended-upgrades\n
+Infos @ https://github.com/zzzkeil/base_setups\n
+Version 2025.08.18\n\n
+Run script now ?"
+
+if whiptail --title "Hi, lets start" --yesno "$msghi" 15 90; then
 echo ""
 else
-whiptail --title "Aborted" --msgbox "Ok, no install right now. cu have a nice day." 15 80
+whiptail --title "Aborted" --msgbox "Ok, no install right now. Have a nice day." 15 80
 exit 1
 fi   
 
