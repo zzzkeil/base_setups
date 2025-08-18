@@ -1,16 +1,5 @@
 #!/bin/bash
 
-# visual text settings
-RED="\e[31m"
-GREEN="\e[32m"
-GRAY="\e[37m"
-YELLOW="\e[93m"
-
-REDB="\e[41m"
-GREENB="\e[42m"
-GRAYB="\e[47m"
-ENDCOLOR="\e[0m"
-
 if whiptail --title "Hi, lets start" --yesno "Bulid date of this testfile: 2025.08\nBase server config for Debian 13 and Ubuntu 24.04\nThis script configure / install\npassword/pubkey , ssh, fail2ban, rsyslog, firawalld, unattended-upgrades\nInfos @ https://github.com/zzzkeil/base_setups\n\nRun script now ?\n" 15 80; then
 echo ""
 else
@@ -151,29 +140,30 @@ mkdir /root/script_backupfiles/
 clear
 
 
-#####################################################################################################
-#####################################################################################################
-#####################################################################################################
-#####################################################################################################
-#####################################################################################################
-
 #
 #root Authentication check if Password or Pubkey used in this session and make changes#
 #
 rootsessioncheck="$(grep root /etc/shadow | cut -c 1-6)"
 if [[ "$rootsessioncheck" = 'root:!' ]] || [[ "$rootsessioncheck" = 'root:*' ]]; then
-   echo ""
-   echo " No root password set, probably you using PubkeyAuthentication in this session !? "
-   echo " This sript now set this settings in your sshd_config : "
-   echo " AuthenticationMethods publickey"
-   echo " PubkeyAuthentication yes"
-   echo " PermitRootLogin prohibit-password"
-   echo " PasswordAuthentication no"
-   echo "" 
-   echo -e "${GREEN}Press enter to continue${ENDCOLOR} or ${RED} CTRL + C to abort${ENDCOLOR}"
-   echo ""
- 
-   read -p ""
+msgroot1="No root password set, probably you using PubkeyAuthentication in this session !?\n
+This sript now set this settings in your sshd_config :\n\n
+AuthenticationMethods publickey\n
+PubkeyAuthentication yes\n
+PermitRootLogin prohibit-password\n
+PasswordAuthentication no\n\n
+Is this right ?"
+if whiptail --title "PubkeyAuthentication" --yesno "$msgroot1" 15 80; then
+echo ""
+else
+whiptail --title "Aborted" --msgbox "Ok, no install right now. cu have a nice day." 15 80
+exit 1
+fi   
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
    
 echo -e "${GREEN}Set ssh config  ${ENDCOLOR}"
 
