@@ -9,7 +9,7 @@ Infos @ https://github.com/zzzkeil/base_setups\n
 Version 2025.08.18\n\n
 Run script now ?"
 
-if whiptail --title "Hi, lets start" --yesno "$msghi" 15 90; then
+if whiptail --title "Hi, lets start" --yesno "$msghi" 20 90; then
 echo ""
 else
 whiptail --title "Aborted" --msgbox "Ok, no install right now. Have a nice day." 15 80
