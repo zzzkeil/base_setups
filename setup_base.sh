@@ -389,19 +389,38 @@ echo "System uptime : $runtime1  / $runtime2 "
 echo ""
 echo "$totalban1 ip adresses with fail2ban from jail sshd"
 echo ""
-if [[ -e /root/afterreboot.txt ]]; then
-echo "Run ./......sh again to finish setup / remove this message"
-else
-echo "logictest"
+echo ""
 fi 
 ' >> /etc/update-motd.d/99-base01
 chmod +x /etc/update-motd.d/99-base01
 dpkg-reconfigure tzdata
 
-
 echo "base_server script installed from :
 https://github.com/zzzkeil/base_setups
 " > /root/base_setup.README
+
+runfile="/root/reminderfile.tmp"
+bashhrc_check=$(cat <<EOF
+
+# check reminderfile.tmp
+if [ -f "$runfile" ]; then
+    echo "File exists: "
+else
+    echo ""
+fi
+EOF
+)
+
+if ! grep -q "check reminderfile.tmp" ~/.bashrc; then
+    if whiptail --title "Wellcome back" --yesno "Continue with latest installation?" 15 80; then
+	./setup_wg_adblock.sh
+    else
+    whiptail --title "Aborted" --msgbox "Manual run ./setup_wg_adblock.sh if you ready" 15 80
+    exit 1
+    fi   
+else
+    echo ""
+fi
 
 #
 # END
