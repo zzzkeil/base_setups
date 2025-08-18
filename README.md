@@ -21,3 +21,24 @@ chmod +x base_setup_2025.sh
 ./base_setup_2025.sh
 
 ```
+
+
+
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+###### just for testing - do not use
+```
+wget -O  testing.sh [https://raw.githubusercontent.com/zzzkeil/base_setups/refs/heads/master/base_setup_2025.sh](https://raw.githubusercontent.com/zzzkeil/base_setups/refs/heads/master/base_setup_2025_whiptail.sh)
+chmod +x testing.sh
+./testing.sh
+
+```
