@@ -243,7 +243,7 @@ Create a new secure random root password,\n
 or DO NOT change root password.\n\n
 If you want to use PubkeyAuthentication, setup this later by yourself\n
 "
-if whiptail --title "Set a secure root password" --yesno "msgroot2" 15 80; then
+if whiptail --title "Set a secure root password" --yesno "$msgroot2" 15 80; then
 newpass=1
 randompasswd=$(</dev/urandom tr -dc 'A-Za-z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_`{|}~' | head -c 72  ; echo)
 echo "root:$randompasswd" | chpasswd
