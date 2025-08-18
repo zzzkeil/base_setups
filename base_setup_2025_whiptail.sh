@@ -55,30 +55,10 @@ whiptail --title "Aborted" --msgbox "This script is only for x86_64 or ARM64  Ar
 exit 1
 fi
 
-#####################################################################################################
-#####################################################################################################
-#####################################################################################################
-#####################################################################################################
-#####################################################################################################
 #
 # OS updates
 #
-echo -e "${GREEN}update upgrade and install ${ENDCOLOR}"
-
-if [[ "$systemos" = 'debian' ]]; then
-apt-get update && apt-get upgrade -y && apt-get autoremove -y
-if [ -f /var/run/reboot-required ]; then
-echo "--------------------------------------------------------------------------------------------------------"
-echo "--------------------------------------------------------------------------------------------------------"
-echo -e " ${RED}Oh dammit :) - System upgrade required a reboot${ENDCOLOR}"
-echo -e " ${YELLOW}reboot, and run this script again ${ENDCOLOR}"
-echo "--------------------------------------------------------------------------------------------------------"
-echo "--------------------------------------------------------------------------------------------------------"
-   exit 1
-fi
-apt-get remove ufw -y
-apt-get install firewalld fail2ban rsyslog unattended-upgrades apt-listchanges -y
-fi
+echo 'Dpkg::Progress-Fancy "1";' | sudo tee /etc/apt/apt.conf.d/99progressbar
 
 if [[ "$systemos" = 'ubuntu' ]]; then
 systemctl stop snapd
@@ -88,26 +68,95 @@ systemctl disable snapd.seeded.service
 apt-get remove --purge --assume-yes snapd
 rm -rf /var/cache/snapd/
 rm -rf ~/snap/
-apt-get update && apt-get upgrade -y && apt-get autoremove -y
-if [ -f /var/run/reboot-required ]; then
-echo "--------------------------------------------------------------------------------------------------------"
-echo "--------------------------------------------------------------------------------------------------------"
-echo -e " ${RED}Oh dammit :) - System upgrade required a reboot${ENDCOLOR}"
-echo -e " ${YELLOW}reboot, and run this script again ${ENDCOLOR}"
-echo "--------------------------------------------------------------------------------------------------------"
-echo "--------------------------------------------------------------------------------------------------------"
-   exit 1
 fi
+
+##
 apt-get remove ufw needrestart -y
-apt-get install firewalld fail2ban rsyslog unattended-upgrades apt-listchanges -y
+##
+
+update_upgrade_with_gauge() {
+    {
+        echo 10
+        echo "Starting apt-get update..."
+        apt-get update -y &> /dev/null
+        if [ $? -ne 0 ]; then
+            echo 100
+            echo "Error: apt-get update failed."
+            exit 1
+        fi
+
+        echo 50
+        echo "Starting apt-get upgrade..."
+        apt-get upgrade -y &> /dev/null
+        if [ $? -ne 0 ]; then
+            echo 100
+            echo "Error: apt-get upgrade failed."
+            exit 1
+        fi
+
+        echo 100
+        echo "Update and Upgrade completed successfully."
+    } | whiptail --title "System Update and Upgrade" --gauge "Please wait while updating and upgrading the system..." 15 80 0
+
+    if [ $? -eq 0 ]; then
+       echo ""
+    else
+        whiptail --title "Error" --msgbox "The update/upgrade process was interrupted." 15 80
+    fi
+}
+
+update_upgrade_with_gauge
+
+if [ -f /var/run/reboot-required ]; then
+whiptail --title "reboot-required" --msgbox "Oh dammit :) - System upgrade required a reboot!\nreboot, and run this script again" 15 80
+exit 1
 fi
+
+
+packages1=("firewalld" "fail2ban" "rsyslog" "unattended-upgrades" "apt-listchanges")
+
+install_multiple_packages_with_gauge1() {
+    total=${#packages1[@]}
+    step=0
+
+    {
+        for pkg in "${packages1[@]}"; do
+            percent=$(( (step * 100) / total ))
+            echo $percent
+            echo "Installing package: $pkg..."
+            sudo apt-get install -y "$pkg" &> /dev/null
+            if [ $? -ne 0 ]; then
+                echo 100
+                echo "Error: Installation of package $pkg failed."
+                exit 1
+            fi
+            step=$((step + 1))
+        done
+        echo 100
+        echo "All packages installed successfully."
+    } | whiptail --title "Installing needed OS Packages" --gauge "Please wait while installing packages...\nqrencode, python-is-python3, curl\nlinux-headers-......, sqlite3, resolvconf" 15 80 0
+
+    if [ $? -eq 0 ]; then
+        echo ""
+    else
+        whiptail --title "Error" --msgbox "Installation process interrupted or failed." 15 80
+		exit 1
+    fi
+}
+
+install_multiple_packages_with_gauge1
+
 
 mkdir /root/script_backupfiles/
 clear
 
 
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
 
-##Testing
 #
 #root Authentication check if Password or Pubkey used in this session and make changes#
 #
