@@ -188,7 +188,7 @@ ssh-keygen -f /etc/ssh/key2ed25519 -t ed25519 -N ""
 rootsessioncheck="$(grep root /etc/shadow | cut -c 1-6)"
 if [[ "$rootsessioncheck" = 'root:!' ]] || [[ "$rootsessioncheck" = 'root:*' ]]; then
 msgroot1="No root password set, probably you using PubkeyAuthentication in this session !?\n
-Add some settings to your sshd_config :\n\n
+Add some settings to your sshd_config :\n
 Port $sshport\n
 AuthenticationMethods publickey\n
 PubkeyAuthentication yes\n
@@ -196,7 +196,7 @@ PermitRootLogin prohibit-password\n
 PasswordAuthentication no\n
 and more....\n
 Is this right ?"
- if whiptail --title "Pubkey Authentication" --yesno "$msgroot1" 15 80; then
+ if whiptail --title "Pubkey Authentication" --yesno "$msgroot1" 20 80; then
  echo ""
  else
  whiptail --title "Aborted" --msgbox "Ok, no install right now. cu have a nice day." 15 80
