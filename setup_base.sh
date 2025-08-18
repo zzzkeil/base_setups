@@ -404,7 +404,12 @@ bashhrc_check=$(cat <<EOF
 
 # check reminderfile.tmp
 if [ -f "$runfile" ]; then
-    echo "File exists: "
+    if whiptail --title "Wellcome back" --yesno "Continue with latest installation?" 15 80; then
+	./setup_wg_adblock.sh
+    else
+    whiptail --title "Aborted" --msgbox "Manual run ./setup_wg_adblock.sh if you ready" 15 80
+    exit 1
+    fi   
 else
     echo ""
 fi
@@ -412,12 +417,7 @@ EOF
 )
 
 if ! grep -q "check reminderfile.tmp" ~/.bashrc; then
-    if whiptail --title "Wellcome back" --yesno "Continue with latest installation?" 15 80; then
-	./setup_wg_adblock.sh
-    else
-    whiptail --title "Aborted" --msgbox "Manual run ./setup_wg_adblock.sh if you ready" 15 80
-    exit 1
-    fi   
+    echo "$bashhrc_check" >> ~/.bashrc
 else
     echo ""
 fi
