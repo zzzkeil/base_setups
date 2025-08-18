@@ -340,9 +340,8 @@ bantime = 18w
 #
 # Updates
 #
-whiptail --title "upgrades" --msgbox "Next step, set unattended-upgrades config " 15 80
+whiptail --title "upgrades" --msgbox "Next step, set unattended-upgrades config\nYou will see nano screens now\n- just press ctrl - x  for defaults" 15 80
 
-if [[ "$systemos" = 'debian' ]] || [[ "$systemos" = 'ubuntu' ]]; then
 mv /etc/apt/apt.conf.d/50unattended-upgrades /root/script_backupfiles/50unattended-upgrades.orig
 echo 'Unattended-Upgrade::Allowed-Origins {
         "${distro_id}:${distro_codename}";
@@ -373,7 +372,7 @@ nano /etc/apt/apt.conf.d/20auto-upgrades
 sed -i "s@6,18:00@9,23:00@" /lib/systemd/system/apt-daily.timer
 sed -i "s@12h@1h@" /lib/systemd/system/apt-daily.timer
 sed -i "s@6:00@1:00@" /lib/systemd/system/apt-daily-upgrade.timer
-fi
+
 
 clear
 
@@ -381,7 +380,6 @@ clear
 #
 #misc
 #
-if [[ "$systemos" = 'debian' ]] || [[ "$systemos" = 'ubuntu' ]]; then
 echo '#!/bin/sh
 runtime1=$(uptime -s)
 runtime2=$(uptime -p)
@@ -391,10 +389,14 @@ echo "System uptime : $runtime1  / $runtime2 "
 echo ""
 echo "$totalban1 ip adresses with fail2ban from jail sshd"
 echo ""
+if [[ -e /root/afterreboot.txt ]]; then
+echo "Run ./......sh again to finish setup / remove this message"
+else
+echo ""
+fi 
 ' >> /etc/update-motd.d/99-base01
 chmod +x /etc/update-motd.d/99-base01
 dpkg-reconfigure tzdata
-fi
 
 
 echo "base_server script installed from :
