@@ -159,7 +159,7 @@ is_valid_port() {
 }
 
 while true; do
-    sshport=$(whiptail --title "SSH Port Settings" --inputbox "Choose a free port from 1-65535, for your SSH connection\n- Do not use port 5335\n- Do not use a used port!\n- To list all currently activ ports, cancel now and you see a list\nThen start this script again" 15 80 "22" 3>&1 1>&2 2>&3)
+    sshport=$(whiptail --title "SSH Port Settings" --inputbox "It can be usefull to change the default SSH Port\nIf you like to use the default, take 22\nor use a free port from 1-65535\n- Do not use port 5335\n- Do not use a used port!\n- To list all currently activ ports, cancel now and you see a list\nThen start this script again" 15 80 "22" 3>&1 1>&2 2>&3)
     if [ $? -eq 0 ]; then
         if is_valid_port "$sshport"; then
             break
@@ -181,14 +181,15 @@ done
 
 ssh-keygen -f /etc/ssh/key1ecdsa -t ecdsa -b 521 -N ""
 ssh-keygen -f /etc/ssh/key2ed25519 -t ed25519 -N ""
-
+clear
 #
 #root Authentication check if Password or Pubkey used in this session and make changes#
 #
 rootsessioncheck="$(grep root /etc/shadow | cut -c 1-6)"
 if [[ "$rootsessioncheck" = 'root:!' ]] || [[ "$rootsessioncheck" = 'root:*' ]]; then
-msgroot1="No root password set, probably you using PubkeyAuthentication in this session !?\n
-Add some settings to your sshd_config :\n
+msgroot1="No root password set in /etc/shadow\n
+You probably using PubkeyAuthentication already !?\n
+Add some settings to your sshd_config like :\n
 Port $sshport\n
 AuthenticationMethods publickey\n
 PubkeyAuthentication yes\n
@@ -196,13 +197,12 @@ PermitRootLogin prohibit-password\n
 PasswordAuthentication no\n
 and more....\n
 Is this right ?"
- if whiptail --title "Pubkey Authentication" --yesno "$msgroot1" 20 80; then
+ if whiptail --title "Pubkey Authentication" --yesno "$msgroot1" 25 80; then
  echo ""
  else
  whiptail --title "Aborted" --msgbox "Ok, no install right now. cu have a nice day." 15 80
  exit 1
  fi   
-
 
 echo "Port $sshport
 HostKey /etc/ssh/key1ecdsa
@@ -340,7 +340,7 @@ bantime = 18w
 #
 # Updates
 #
-whiptail --title "upgrades" --msgbox "INFO: Next step, set unattended-upgrades config\nYou will see nano screens now\n- just press ctrl - x  for defaults" 15 80
+whiptail --title "INFO: upgrades" --msgbox "Next step, set unattended-upgrades config\nYou will see 2 nano screens now\n- Press ctrl - x  for defaults\nor\n- Change things and press ctrl - x and ctrl - y and enter" 15 80
 
 mv /etc/apt/apt.conf.d/50unattended-upgrades /root/script_backupfiles/50unattended-upgrades.orig
 echo 'Unattended-Upgrade::Allowed-Origins {
@@ -412,7 +412,7 @@ fi
 if [[ "$newpass" = '0' ]]; then
 whiptail --title "Info" --msgbox "Your root password or PubkeyAuthentication has not changed\n\nNew ssh port = $sshport / open in firewalld" 15 80
 fi
-if whiptail --title "Lets restart" --yesno "reboot now. It's highly recommended\nNew ssh port = $sshport / open in firewalld" 15 80; then
+if whiptail --title "Lets restart" --yesno "Reboot now\nIt's highly recommended\nNew ssh port = $sshport / open in firewalld" 15 80; then
 systemctl enable fail2ban.service
 systemctl enable firewalld
 reboot
