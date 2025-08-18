@@ -392,7 +392,7 @@ echo ""
 if [[ -e /root/afterreboot.txt ]]; then
 echo "Run ./......sh again to finish setup / remove this message"
 else
-echo ""
+echo "logictest"
 fi 
 ' >> /etc/update-motd.d/99-base01
 chmod +x /etc/update-motd.d/99-base01
