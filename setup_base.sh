@@ -408,7 +408,6 @@ if [ -f "$runfile" ]; then
 	./setup_wg_adblock.sh
     else
     whiptail --title "Aborted" --msgbox "Manual run ./setup_wg_adblock.sh if you ready" 15 80
-    exit 1
     fi   
 else
     echo ""
