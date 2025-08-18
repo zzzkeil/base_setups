@@ -132,7 +132,7 @@ install_multiple_packages_with_gauge1() {
         done
         echo 100
         echo "All packages installed successfully."
-    } | whiptail --title "Installing needed OS Packages" --gauge "Please wait while installing packages...\nqrencode, python-is-python3, curl\nlinux-headers-......, sqlite3, resolvconf" 15 80 0
+    } | whiptail --title "Installing needed OS Packages" --gauge "Please wait while installing packages...\n$packages1" 15 90 0
 
     if [ $? -eq 0 ]; then
         echo ""
@@ -159,7 +159,7 @@ is_valid_port() {
 }
 
 while true; do
-    sshport=$(whiptail --title "Wireguard Port Settings" --inputbox "Choose a free port 1-65535\n- Do not use port 5335\n- Do not use a used port!\n- To list all currently activ ports, cancel now and you see a list\nThen start this script again" 15 80 "2222" 3>&1 1>&2 2>&3)
+    sshport=$(whiptail --title "SSH Port Settings" --inputbox "Choose a free port 1-65535\n- Do not use port 5335\n- Do not use a used port!\n- To list all currently activ ports, cancel now and you see a list\nThen start this script again" 15 80 "22" 3>&1 1>&2 2>&3)
     if [ $? -eq 0 ]; then
         if is_valid_port "$sshport"; then
             break
