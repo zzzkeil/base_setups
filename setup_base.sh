@@ -390,7 +390,6 @@ echo '
 runtime1=$(uptime -s)
 runtime2=$(uptime -p)
 totalban1=$(fail2ban-client status sshd | grep "Currently banned" | sed -e "s/^\s*//" -e "/^$/d")
-echo ""
 echo "System uptime : $runtime1  / $runtime2 "
 echo ""
 echo "$totalban1 ip adresses with fail2ban from jail sshd"
