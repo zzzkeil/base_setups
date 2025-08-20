@@ -58,7 +58,9 @@ fi
 #
 echo 'Dpkg::Progress-Fancy "1";' | sudo tee /etc/apt/apt.conf.d/99progressbar
 
+
 if [[ "$systemos" = 'ubuntu' ]]; then
+whiptail --title "Ubuntu snapd" --msgbox "Don't worry if you see erros or warings\nTrying to stop and remove snapd\nMaybe its not installed, but we going the save way :)" 15 80
 systemctl stop snapd
 systemctl disable snapd
 systemctl disable snapd.socket
