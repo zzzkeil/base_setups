@@ -340,10 +340,15 @@ bantime = 18w
 #
 # Updates
 #
-whiptail --title "INFO: upgrades" --msgbox "Next step, set unattended-upgrades config\nYou will see 2 nano screens now\n- Press ctrl - x  for defaults\nor\n- Change things and press ctrl - x and ctrl - y and enter" 15 80
+whiptail --title "INFO: upgrades" --msgbox "Next step, set unattended-upgrades config\nYou will see a nano screen now" 15 80
 
 mv /etc/apt/apt.conf.d/50unattended-upgrades /root/script_backupfiles/50unattended-upgrades.orig
-echo 'Unattended-Upgrade::Allowed-Origins {
+echo '#
+# For defaults settings press CTRL - X (close)
+# If you change things  press CTRL - X and CTRL - Y and ENTER (save and close)
+# Maybe change Automatic-Reboot-Time ..
+#
+Unattended-Upgrade::Allowed-Origins {
         "${distro_id}:${distro_codename}";
 	"${distro_id}:${distro_codename}-security";
 	"${distro_id}ESM:${distro_codename}";
@@ -367,7 +372,7 @@ APT::Periodic::Unattended-Upgrade "1";
 ' >> /etc/apt/apt.conf.d/20auto-upgrades
 
 nano /etc/apt/apt.conf.d/50unattended-upgrades
-nano /etc/apt/apt.conf.d/20auto-upgrades
+#nano /etc/apt/apt.conf.d/20auto-upgrades
 
 sed -i "s@6,18:00@9,23:00@" /lib/systemd/system/apt-daily.timer
 sed -i "s@12h@1h@" /lib/systemd/system/apt-daily.timer
