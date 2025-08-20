@@ -373,14 +373,20 @@ sed -i "s@6,18:00@9,23:00@" /lib/systemd/system/apt-daily.timer
 sed -i "s@12h@1h@" /lib/systemd/system/apt-daily.timer
 sed -i "s@6:00@1:00@" /lib/systemd/system/apt-daily-upgrade.timer
 
-
+dpkg-reconfigure tzdata
 clear
 
 
 #
 #misc
 #
-echo '#!/bin/sh
+echo "base_server script installed from :
+https://github.com/zzzkeil/base_setups
+" > /root/base_setup.README
+
+
+
+echo '
 runtime1=$(uptime -s)
 runtime2=$(uptime -p)
 totalban1=$(fail2ban-client status sshd | grep "Currently banned" | sed -e "s/^\s*//" -e "/^$/d")
@@ -389,15 +395,7 @@ echo "System uptime : $runtime1  / $runtime2 "
 echo ""
 echo "$totalban1 ip adresses with fail2ban from jail sshd"
 echo ""
-echo ""
-fi 
-' >> /etc/update-motd.d/99-base01
-chmod +x /etc/update-motd.d/99-base01
-dpkg-reconfigure tzdata
-
-echo "base_server script installed from :
-https://github.com/zzzkeil/base_setups
-" > /root/base_setup.README
+' >> ~/.bashrc
 
 runfile="/root/reminderfile.tmp"
 bashhrc_check=$(cat <<EOF
