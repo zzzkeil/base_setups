@@ -431,7 +431,7 @@ bashhrc_check=$(cat <<EOF
 # check reminderfile.tmp
 if [ -f "$runfile" ]; then
     if whiptail --title "Wellcome back" --yesno "Continue with latest installation?" 15 80; then
-	./setup_wg_adblock.sh
+	./setup_menu.sh
     else
     whiptail --title "Aborted" --msgbox "Manual run ./setup_wg_adblock.sh if you ready" 15 80
     fi   
