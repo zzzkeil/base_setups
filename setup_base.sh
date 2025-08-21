@@ -402,17 +402,20 @@ chmod -x /etc/update-motd.d/*
 fi
 
 
-echo '#!/bin/bash
-totalban1=$(fail2ban-client status sshd | grep "Currently banned" | sed -e "s/^\s*//" -e "/^$/d")
-totalban2=$(echo "$totalban1" | cut -c 5-)
+echo '
+#!/bin/bash
+totalban1=$(fail2ban-client status sshd | grep "Currently banned" | sed -e "s/^\s*//" -e "/^$/d" | awk '{print $4}')
+if [ -z "$totalban1" ]; then
+    totalban1="0"
+fi
 echo ""
-echo "Wellcome back to your server $(hostname) "
+echo "Welcome back to your server: $(hostname)"
 echo ""
 echo "Uptime   : $(uptime -s) / $(uptime -p)"
-echo "CPU      : $(uptime | awk -F'load average:' '{ print $2 }' | cut -d',' -f1)"
+echo "CPU      : $(uptime | awk -F'load average: ' '{ print $2 }') load"
 echo "RAM      : $(free -h | grep Mem | awk '{print $3 "/" $2}')"
 echo "DISK     : $(df -h --total | grep total | awk '{print $3 "/" $2 " (" $5 " used)"}')"
-echo "fail2ban : c$totalban2 IPs (sshd jail)"
+echo "fail2ban : $totalban1 IPs banned (sshd jail)"
 echo ""
 ' >> /etc/update-motd.d/20-25login
 chmod +x /etc/update-motd.d/20-25login
