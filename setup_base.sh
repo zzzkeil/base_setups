@@ -401,8 +401,7 @@ if [[ "$systemos" = 'ubuntu' ]]; then
 chmod -x /etc/update-motd.d/*
 fi
 
-
-echo '
+cat << 'EOF' > /etc/update-motd.d/20-25login
 #!/bin/bash
 totalban1=$(fail2ban-client status sshd | grep "Currently banned" | sed -e "s/^\s*//" -e "/^$/d" | awk '{print $4}')
 if [ -z "$totalban1" ]; then
@@ -417,7 +416,7 @@ echo "RAM      : $(free -h | grep Mem | awk '{print $3 "/" $2}')"
 echo "DISK     : $(df -h --total | grep total | awk '{print $3 "/" $2 " (" $5 " used)"}')"
 echo "fail2ban : $totalban1 IPs banned (sshd jail)"
 echo ""
-' >> /etc/update-motd.d/20-25login
+EOF
 chmod +x /etc/update-motd.d/20-25login
 
 runfile="/root/reminderfile.tmp"
