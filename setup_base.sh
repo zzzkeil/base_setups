@@ -414,8 +414,8 @@ echo "RAM      : $(free -h | grep Mem | awk '{print $3 "/" $2}')"
 echo "DISK     : $(df -h --total | grep total | awk '{print $3 "/" $2 " (" $5 " used)"}')"
 echo "fail2ban : c$totalban2 IPs (sshd jail)"
 echo ""
-' >> /etc/update-motd.d/20-login
-chmod +x /etc/update-motd.d/20-login
+' >> /etc/update-motd.d/20-25login
+chmod +x /etc/update-motd.d/20-25login
 
 runfile="/root/reminderfile.tmp"
 bashhrc_check=$(cat <<EOF
