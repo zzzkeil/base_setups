@@ -393,12 +393,12 @@ https://github.com/zzzkeil/base_setups
 
 
 if [[ "$systemos" = 'debian' ]]; then
-rm /etc/update-motd.d/*
+chmod -x /etc/update-motd.d/*
 fi
 
 
 if [[ "$systemos" = 'ubuntu' ]]; then
-rm /etc/update-motd.d/*
+chmod -x /etc/update-motd.d/*
 fi
 
 
