@@ -408,7 +408,7 @@ if [ -z "$totalban1" ]; then
     totalban1="0"
 fi
 echo ""
-echo "Welcome back to your server: $(hostname)"
+echo "Wellcome back to your server: $(hostname)"
 echo ""
 echo "Uptime   : $(uptime -s) / $(uptime -p)"
 echo "CPU      : $(uptime | awk -F'load average: ' '{ print $2 }') load"
@@ -416,6 +416,12 @@ echo "RAM      : $(free -h | grep Mem | awk '{print $3 "/" $2}')"
 echo "DISK     : $(df -h --total | grep total | awk '{print $3 "/" $2 " (" $5 " used)"}')"
 echo "fail2ban : $totalban1 IPs banned (sshd jail)"
 echo ""
+if [ -f /var/run/reboot-required ]; then
+echo "--------------------------------------------"
+echo "Update   : System upgrade required a reboot"
+echo "--------------------------------------------"
+echo ""
+fi
 EOF
 chmod +x /etc/update-motd.d/20-25login
 
