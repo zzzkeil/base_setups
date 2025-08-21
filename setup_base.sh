@@ -408,7 +408,7 @@ if [ -z "$totalban1" ]; then
     totalban1="0"
 fi
 echo ""
-echo "Wellcome back to your server: $(hostname)"
+echo "Welcome back to your server: $(hostname)"
 echo ""
 echo "Uptime   : $(uptime -s) / $(uptime -p)"
 echo "CPU      : $(uptime | awk -F'load average: ' '{ print $2 }') load"
@@ -430,7 +430,7 @@ bashhrc_check=$(cat <<EOF
 
 # check reminderfile.tmp
 if [ -f "$runfile" ]; then
-    if whiptail --title "Wellcome back" --yesno "Continue with latest installation?" 15 80; then
+    if whiptail --title "Welcome back" --yesno "Continue with latest installation?" 15 80; then
 	./setup_menu.sh
     else
     whiptail --title "Aborted" --msgbox "Manual run ./setup_wg_adblock.sh if you ready" 15 80
