@@ -392,16 +392,30 @@ https://github.com/zzzkeil/base_setups
 " > /root/base_setup.README
 
 
+if [[ "$systemos" = 'debian' ]]; then
+rm /etc/update-motd.d/*
+fi
 
-echo '
-runtime1=$(uptime -s)
-runtime2=$(uptime -p)
+
+if [[ "$systemos" = 'ubuntu' ]]; then
+rm /etc/update-motd.d/*
+fi
+
+
+echo '#!/bin/bash
 totalban1=$(fail2ban-client status sshd | grep "Currently banned" | sed -e "s/^\s*//" -e "/^$/d")
-echo "System uptime : $runtime1  / $runtime2 "
+totalban2=$(echo "$totalban1" | cut -c 5-)
 echo ""
-echo "$totalban1 ip adresses with fail2ban from jail sshd"
+echo "Wellcome back to your server $(hostname) "
 echo ""
-' >> ~/.bashrc
+echo "Uptime   : $(uptime -s) / $(uptime -p)"
+echo "CPU      : $(uptime | awk -F'load average:' '{ print $2 }' | cut -d',' -f1)"
+echo "RAM      : $(free -h | grep Mem | awk '{print $3 "/" $2}')"
+echo "DISK     : $(df -h --total | grep total | awk '{print $3 "/" $2 " (" $5 " used)"}')"
+echo "fail2ban : c$totalban2 IPs (sshd jail)"
+echo ""
+' >> /etc/update-motd.d/20-login
+chmod +x /etc/update-motd.d/20-login
 
 runfile="/root/reminderfile.tmp"
 bashhrc_check=$(cat <<EOF
