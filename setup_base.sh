@@ -394,6 +394,7 @@ https://github.com/zzzkeil/base_setups
 
 if [[ "$systemos" = 'debian' ]]; then
 chmod -x /etc/update-motd.d/*
+mv /etc/motd /etc/motd.bak
 fi
 
 
@@ -404,6 +405,7 @@ fi
 cat << 'EOF' > /etc/update-motd.d/20-25login
 #!/bin/bash
 totalban1=$(fail2ban-client status sshd | grep "Currently banned" | sed -e "s/^\s*//" -e "/^$/d" | awk '{print $4}')
+systemver=$(grep PRETTY_NAME /etc/os-release | sed 's/PRETTY_NAME="\(.*\)"/\1/' | sed 's/GNU\///' | awk '{print $1, $3}')
 if [ -z "$totalban1" ]; then
     totalban1="0"
 fi
@@ -411,6 +413,7 @@ echo ""
 echo "Hello $(whoami), welcome back to your server:"
 echo ""
 echo "Hostname : $(hostname)"
+echo "Kernel   : $systemver $(uname -v | awk '{print $4,$5,$6}')"
 echo "Uptime   : $(uptime -s) / $(uptime -p)"
 echo "CPU      : $(uptime | awk -F'load average: ' '{ print $2 }') load"
 echo "RAM      : $(free -h | grep Mem | awk '{print $3 "/" $2}')"
