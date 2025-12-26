@@ -210,7 +210,7 @@ echo "Port $sshport
 HostKey /etc/ssh/key1ecdsa
 HostKey /etc/ssh/key2ed25519
 HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com,ssh-ed25519  
-KexAlgorithms curve25519-sha256                                 
+#KexAlgorithms curve25519-sha256                                 
 Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com    
 MACs hmac-sha2-512-etm@openssh.com
 HostbasedAcceptedKeyTypes ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,ssh-ed25519
