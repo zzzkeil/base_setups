@@ -354,7 +354,7 @@ Unattended-Upgrade::Allowed-Origins {
         "${distro_id}:${distro_codename}";
 	"${distro_id}:${distro_codename}-security";
 	"${distro_id}ESM:${distro_codename}";
-//	"${distro_id}:${distro_codename}-updates";
+	"${distro_id}:${distro_codename}-updates";
 //	"${distro_id}:${distro_codename}-proposed";
 //	"${distro_id}:${distro_codename}-backports";
 };
