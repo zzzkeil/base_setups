@@ -322,10 +322,23 @@ whiptail --title "INFO: upgrades" --msgbox "Next step, set unattended-upgrades c
 #####################
 #hier
 
-sudo systemctl enable --now zypper-autoupdate.service
+
+zypper install --no-recommends os-update
+
+
 #mv /etc/zypp/autoupdate.conf /etc/zypp/autoupdate.conf.orig
-#echo '
-#' >> /etc/zypp/autoupdate.conf
+echo '
+UPDATE_CMD=auto
+REBOOT_CMD=auto
+RESTART_SERVICES=yes
+#IGNORE_SERVICES_FROM_RESTART="dbus dbus-broker virtlockd"
+#SERVICES_TRIGGERING_REBOOT=""
+#SERVICES_TRIGGERING_SOFT_REBOOT="dbus dbus-broker"
+' >> /etc/os-update.conf
+systemctl edit --full os-update.timer
+systemctl enable --now os-update.timer
+
+
 
 
 dpkg-reconfigure tzdata
