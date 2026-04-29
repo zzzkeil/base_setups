@@ -181,8 +181,7 @@ while true; do
     fi
 done
 
-ssh-keygen -f /etc/ssh/key1ecdsa -t ecdsa -b 521 -N ""
-ssh-keygen -f /etc/ssh/key2ed25519 -t ed25519 -N ""
+ssh-keygen -f /etc/ssh/key_ed25519 -t ed25519 -N "" -C "Server-Hostkey"
 clear
 #
 #root Authentication check if Password or Pubkey used in this session and make changes#
@@ -198,6 +197,7 @@ PubkeyAuthentication yes\n
 PermitRootLogin prohibit-password\n
 PasswordAuthentication no\n
 and more....\n
+!!! Only Ed25519 ssh-keys are allowed !!!\n
 Is this right ?"
  if whiptail --title "Pubkey Authentication" --yesno "$msgroot1" 25 80; then
  echo ""
@@ -207,13 +207,12 @@ Is this right ?"
  fi   
 
 echo "Port $sshport
-HostKey /etc/ssh/key1ecdsa
-HostKey /etc/ssh/key2ed25519
-HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com,ssh-ed25519  
-#KexAlgorithms curve25519-sha256                                 
-Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com    
+HostKey /etc/ssh/key_ed25519
+HostKeyAlgorithms ssh-ed25519
+KexAlgorithms sntrup761x25519-sha512@openssh.com,curve25519-sha256@libssh.org
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
 MACs hmac-sha2-512-etm@openssh.com
-HostbasedAcceptedKeyTypes ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,ssh-ed25519
+HostbasedAcceptedKeyTypes ssh-ed25519
 
 PermitRootLogin prohibit-password
 PasswordAuthentication no
@@ -244,6 +243,7 @@ msgroot2="Secure root password\n
 Yes, to create a new secure random root password,\n
 No,  DO NOT change your current root password.\n\n
 If you want to use PubkeyAuthentication, setup this later by yourself\n
+!!! Only Ed25519 ssh-keys are allowed !!!\n
 "
 if whiptail --title "Set a secure root password" --yesno "$msgroot2" 15 80; then
 newpass=1
@@ -257,13 +257,12 @@ newpass=0
 fi
 
 echo "Port $sshport
-HostKey /etc/ssh/key1ecdsa
-HostKey /etc/ssh/key2ed25519
-HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com,ssh-ed25519  
-KexAlgorithms curve25519-sha256                                 
-Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com    
+HostKey /etc/ssh/key_ed25519
+HostKeyAlgorithms ssh-ed25519
+KexAlgorithms sntrup761x25519-sha512@openssh.com,curve25519-sha256@libssh.org
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
 MACs hmac-sha2-512-etm@openssh.com
-HostbasedAcceptedKeyTypes ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,ssh-ed25519
+HostbasedAcceptedKeyTypes ssh-ed25519
 
 PermitRootLogin yes
 PasswordAuthentication yes
