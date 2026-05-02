@@ -417,6 +417,8 @@ echo "Uptime    : $(uptime -s) / $(uptime -p)"
 echo "CPU       : $(uptime | awk -F'load average: ' '{ print $2 }') load"
 echo "RAM       : $(free -h | grep Mem | awk '{print $3 "/" $2}')"
 echo "DISK      : $(df -h --total | grep total | awk '{print $3 "/" $2 " (" $5 " used)"}')"
+echo "IPv4      : $(hostname -I | awk '{print $1}')"
+echo "IPv6      : $(hostname -I | grep -oE '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}' | head -n 1 || echo 'Not assigned')"
 echo "fail2ban  : $totalban1 IPs banned (sshd jail)"
 if [ -f /var/run/reboot-required ]; then
 echo ""
